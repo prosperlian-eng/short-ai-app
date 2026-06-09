@@ -6,6 +6,13 @@ import { useRouter, usePathname } from 'next/navigation';
 import type { AppState, OutroState, CardData, FontFamily, FontEffect, BorderStyle, PatternMode } from '@/lib/types';
 import { FONT_OPTIONS } from '@/lib/fonts';
 import { drawFrame, drawOutroFrame, analyzeScenes, fmtTime, W, H } from '@/lib/canvas';
+import { createClient } from '@/lib/supabase/client';
+import type { User } from '@supabase/supabase-js';
+import type { Plan } from '@/lib/plans';
+import { canGenerate } from '@/lib/plans';
+import { AuthModal } from './AuthModal';
+import { PricingModal } from './PricingModal';
+import { UserMenu } from './UserMenu';
 
 const CATCHCOPIES = [
   'まさかの結果に\n全員驚愕。','これが本当の\n成長記録。','この一打、\n空気が変わった。',
@@ -60,6 +67,15 @@ export function ShortAIApp() {
   const router = useRouter();
   const pathname = usePathname();
 
+  // ── auth & billing ──
+  const [user, setUser] = useState<User | null>(null);
+  const [userPlan, setUserPlan] = useState<Plan>('free');
+  const [usageCount, setUsageCount] = useState(0);
+  const [usageLimit, setUsageLimit] = useState(3);
+  const [showAuth, setShowAuth] = useState(false);
+  const [showPricing, setShowPricing] = useState(false);
+  const supabase = createClient();
+
   const [state, setState] = useState<AppState>(defaultState);
   const [outro, setOutro] = useState<OutroState>(defaultOutro);
   const [loading, setLoading] = useState(false);
@@ -81,6 +97,32 @@ export function ShortAIApp() {
   const cardDataRef = useRef<CardData[]>([]);
   const resultsRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+
+  // ── auth init ──
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => { if (data.user) setUser(data.user); });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      if (session?.user) fetchUsage();
+    });
+    return () => subscription.unsubscribe();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fetchUsage = async () => {
+    const res = await fetch('/api/user/usage');
+    const data = await res.json() as { plan: Plan; count: number; limit: number };
+    setUserPlan(data.plan);
+    setUsageCount(data.count);
+    setUsageLimit(data.limit);
+  };
+
+  useEffect(() => { if (user) fetchUsage(); }, [user]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setUser(null); setUserPlan('free'); setUsageCount(0); setUsageLimit(3);
+  };
 
   // ── locale switch ──
   const switchLocale = (l: string) => {
@@ -162,6 +204,11 @@ export function ShortAIApp() {
 
   // ── generate ──
   const handleGenerate = async () => {
+    // 未ログイン → ログインモーダル
+    if (!user) { setShowAuth(true); return; }
+    // 制限チェック
+    if (!canGenerate(userPlan, usageCount)) { setShowPricing(true); return; }
+
     setLoading(true); setProgress(0);
     const n = state.count;
     const copies = pickCopies(n, locale);
@@ -179,6 +226,15 @@ export function ShortAIApp() {
     }
 
     await renderPreviews(scenes, copies);
+
+    // 生成カウントを記録
+    await fetch('/api/user/usage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ clips: n }),
+    });
+    await fetchUsage();
+
     setLoading(false); setShowResults(true);
     setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
   };
@@ -435,11 +491,29 @@ export function ShortAIApp() {
 
   return (
     <>
+      {/* Modals */}
+      <AuthModal open={showAuth} onClose={() => setShowAuth(false)} />
+      <PricingModal open={showPricing} onClose={() => setShowPricing(false)} currentPlan={userPlan} />
+
       {/* Hero */}
       <header className="hero">
-        <div className="locale-switcher">
+        <div className="locale-switcher" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <button className={`locale-btn${locale === 'ja' ? ' active' : ''}`} onClick={() => switchLocale('ja')}>🇯🇵 日本語</button>
-          <button className={`locale-btn${locale === 'en' ? ' active' : ''}`} onClick={() => switchLocale('en')}>🇺🇸 English</button>
+          <button className={`locale-btn${locale === 'en' ? ' active' : ''}`} onClick={() => switchLocale('en')}>🇺🇸 EN</button>
+          {user ? (
+            <UserMenu
+              email={user.email ?? ''}
+              plan={userPlan}
+              count={usageCount}
+              limit={usageLimit}
+              onUpgrade={() => setShowPricing(true)}
+              onLogout={handleLogout}
+            />
+          ) : (
+            <button className="locale-btn" onClick={() => setShowAuth(true)}>
+              {locale === 'ja' ? 'ログイン' : 'Login'}
+            </button>
+          )}
         </div>
         <div className="hero-badge">{t('hero.badge')}</div>
         <h1 className="hero-title">{t('hero.title')}<span className="hero-dot">.</span></h1>
