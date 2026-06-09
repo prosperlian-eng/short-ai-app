@@ -313,15 +313,32 @@ export function ShortAIApp() {
       listMeta.innerHTML = `<div class="list-meta-title">${title}</div><div class="list-meta-scene">${fmtTime(startTime)} 〜 ${fmtTime(startTime+clipDuration)}</div>`;
       card.appendChild(listMeta);
 
+      // ── Editable title ──
+      const titleWrap = document.createElement('div'); titleWrap.className = 'card-title-edit-wrap';
+      const titleInput = document.createElement('textarea'); titleInput.className = 'card-title-input';
+      titleInput.value = title; titleInput.rows = 2; titleInput.maxLength = 60;
+      titleInput.placeholder = locale === 'en' ? 'Edit title...' : 'テキストを編集...';
+      let redrawTimer: ReturnType<typeof setTimeout> | null = null;
+      titleInput.addEventListener('input', () => {
+        const nt = titleInput.value;
+        cardDataRef.current[i].title = nt;
+        if (redrawTimer) clearTimeout(redrawTimer);
+        redrawTimer = setTimeout(() => drawThumbnail(canvas, state.videoURL, startTime, nt, patIdx), 300);
+      });
+      titleWrap.appendChild(titleInput);
+      card.appendChild(titleWrap);
+
       const actions = document.createElement('div'); actions.className = 'short-card-actions';
       const dlBtn = document.createElement('button'); dlBtn.className = 'short-dl-btn';
       dlBtn.innerHTML = t('results.dlVideo');
       dlBtn.addEventListener('click', () => downloadShort(i, dlBtn));
       const regenBtn = document.createElement('button'); regenBtn.className = 'short-regen-btn'; regenBtn.textContent = '🎲';
+      regenBtn.title = locale === 'en' ? 'Random title' : 'ランダムタイトル';
       regenBtn.addEventListener('click', async () => {
         const pool = locale === 'en' ? EN_CATCHCOPIES : CATCHCOPIES;
         const nt = pool[Math.floor(Math.random() * pool.length)];
         cardDataRef.current[i].title = nt;
+        titleInput.value = nt;
         await drawThumbnail(canvas, state.videoURL, startTime, nt, patIdx);
       });
       actions.appendChild(dlBtn); actions.appendChild(regenBtn); card.appendChild(actions);
