@@ -1,0 +1,98 @@
+{
+  "hero": {
+    "badge": "DEMO",
+    "title": "ShortAI",
+    "subtitle": "本編動画をアップロードするだけで\nバズるショート動画を自動生成"
+  },
+  "step1": {
+    "badge": "STEP 1",
+    "title": "動画をアップロード",
+    "hint": "mp4 / mov ファイルをドロップ\nまたはタップして選択"
+  },
+  "step2": {
+    "badge": "STEP 2",
+    "title": "生成設定",
+    "count": "生成本数",
+    "font": "フォント",
+    "fontEffect": "テキストエフェクト",
+    "fontSize": "フォントサイズ",
+    "textColor": "テキストカラー",
+    "borderStyle": "枠スタイル",
+    "borderColor": "枠カラー",
+    "pattern": "背景パターン",
+    "ctaText": "CTAテキスト",
+    "ctaColor": "CTAカラー",
+    "preset": "プリセット",
+    "savePreset": "💾 保存",
+    "loadPreset": "📂 読み込む",
+    "effects": {
+      "shadow": "影（デフォルト）",
+      "glow": "光彩",
+      "stroke": "縁取り",
+      "box": "ボックス",
+      "simple": "シンプル"
+    },
+    "borders": {
+      "none": "なし",
+      "thin": "細線",
+      "thick": "太線",
+      "glow": "光彩枠",
+      "corner": "角飾り"
+    },
+    "patterns": {
+      "random": "ランダム",
+      "dramatic": "ドラマチック",
+      "clean": "クリーン",
+      "energy": "エネルギー",
+      "luxury": "ラグジュアリー",
+      "street": "ストリート"
+    }
+  },
+  "outro": {
+    "badge": "OUTRO",
+    "title": "エンディング設定",
+    "titleSub": "（動画末尾 5秒）",
+    "modeText": "✏️ テキスト",
+    "modeVideo": "🎬 動画アップロード",
+    "modeNone": "✕ なし",
+    "channel": "チャンネル名",
+    "channelPlaceholder": "例：golfami channel",
+    "sub": "サブテキスト",
+    "subPlaceholder": "例：チャンネル登録よろしくお願いします！",
+    "sns": "SNSリンク（任意）",
+    "snsPlaceholder": "例：@golfami_channel",
+    "bgColor": "背景カラー",
+    "preview": "プレビュー",
+    "uploadHint": "エンディング動画をドロップ\nまたはタップして選択",
+    "note": "※ 先頭から5秒が使用されます。推奨：9:16縦型"
+  },
+  "step3": {
+    "badge": "STEP 3",
+    "title": "AIショートを生成",
+    "button": "AIショートを生成する",
+    "analyzing": "AIが動画を解析中...",
+    "analyzingSub": "盛り上がりシーンを検出しています",
+    "generating": "サムネイル生成中..."
+  },
+  "results": {
+    "title": "生成されたショート動画",
+    "regenTitles": "🎲 タイトルを再生成",
+    "dlAll": "⬇ 全てダウンロード",
+    "grid": "グリッド",
+    "list": "リスト",
+    "selectAll": "☑ 全選択",
+    "deselectAll": "☐ 全解除",
+    "dlSelected": "⬇ 選択をDL",
+    "dlVideo": "⬇ 動画ダウンロード",
+    "recording": "⏺ 録画中"
+  },
+  "footer": "ShortAI DEMO — バックエンド不使用 / ブラウザのみで動作",
+  "toast": {
+    "uploadFirst": "動画をアップロードしてください",
+    "regenDone": "タイトルを再生成しました",
+    "presetSaved": "「{name}」を保存しました",
+    "presetApplied": "「{name}」を適用しました",
+    "downloaded": "{name} をダウンロードしました",
+    "recordFailed": "録画に失敗しました"
+  }
+}

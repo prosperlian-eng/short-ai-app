@@ -1,0 +1,98 @@
+{
+  "hero": {
+    "badge": "DEMO",
+    "title": "ShortAI",
+    "subtitle": "Upload your video — get viral\nshort clips automatically"
+  },
+  "step1": {
+    "badge": "STEP 1",
+    "title": "Upload Video",
+    "hint": "Drop mp4 / mov here\nor tap to select"
+  },
+  "step2": {
+    "badge": "STEP 2",
+    "title": "Settings",
+    "count": "Clips",
+    "font": "Font",
+    "fontEffect": "Text Effect",
+    "fontSize": "Font Size",
+    "textColor": "Text Color",
+    "borderStyle": "Border",
+    "borderColor": "Border Color",
+    "pattern": "Background",
+    "ctaText": "CTA Text",
+    "ctaColor": "CTA Color",
+    "preset": "Preset",
+    "savePreset": "💾 Save",
+    "loadPreset": "📂 Load",
+    "effects": {
+      "shadow": "Shadow (default)",
+      "glow": "Glow",
+      "stroke": "Outline",
+      "box": "Box",
+      "simple": "Simple"
+    },
+    "borders": {
+      "none": "None",
+      "thin": "Thin",
+      "thick": "Thick",
+      "glow": "Glow",
+      "corner": "Corner"
+    },
+    "patterns": {
+      "random": "Random",
+      "dramatic": "Dramatic",
+      "clean": "Clean",
+      "energy": "Energy",
+      "luxury": "Luxury",
+      "street": "Street"
+    }
+  },
+  "outro": {
+    "badge": "OUTRO",
+    "title": "Ending Screen",
+    "titleSub": "(last 5 sec)",
+    "modeText": "✏️ Text",
+    "modeVideo": "🎬 Upload Video",
+    "modeNone": "✕ None",
+    "channel": "Channel Name",
+    "channelPlaceholder": "e.g. My Channel",
+    "sub": "Subtitle",
+    "subPlaceholder": "e.g. Subscribe for more!",
+    "sns": "SNS Link (optional)",
+    "snsPlaceholder": "e.g. @mychannel",
+    "bgColor": "Background Color",
+    "preview": "Preview",
+    "uploadHint": "Drop ending video here\nor tap to select",
+    "note": "※ First 5 seconds will be used. Recommended: 9:16 portrait"
+  },
+  "step3": {
+    "badge": "STEP 3",
+    "title": "Generate AI Shorts",
+    "button": "Generate AI Shorts",
+    "analyzing": "AI is analyzing your video...",
+    "analyzingSub": "Detecting highlight scenes",
+    "generating": "Generating thumbnails..."
+  },
+  "results": {
+    "title": "Generated Short Clips",
+    "regenTitles": "🎲 Regenerate Titles",
+    "dlAll": "⬇ Download All",
+    "grid": "Grid",
+    "list": "List",
+    "selectAll": "☑ Select All",
+    "deselectAll": "☐ Deselect All",
+    "dlSelected": "⬇ DL Selected",
+    "dlVideo": "⬇ Download",
+    "recording": "⏺ Recording"
+  },
+  "footer": "ShortAI DEMO — No backend · Runs entirely in your browser",
+  "toast": {
+    "uploadFirst": "Please upload a video first",
+    "regenDone": "Titles regenerated",
+    "presetSaved": "Saved \"{name}\"",
+    "presetApplied": "Applied \"{name}\"",
+    "downloaded": "Downloaded {name}",
+    "recordFailed": "Recording failed"
+  }
+}
