@@ -15,70 +15,208 @@ function sr(n: number) {
   return x - Math.floor(x);
 }
 
-// ── background patterns ───────────────────────────────────────
+// ── background patterns (next-gen) ───────────────────────────
 type PatternFn = (ctx: CanvasRenderingContext2D) => void;
 
 const PATTERNS: Record<string, PatternFn> = {
   dramatic(ctx) {
-    const g = ctx.createLinearGradient(0, 0, 0, H);
-    g.addColorStop(0, '#0a0014'); g.addColorStop(0.5, '#1a0030'); g.addColorStop(1, '#000');
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-    const rg = ctx.createRadialGradient(W/2, H*.5, 0, W/2, H*.5, W*.9);
-    rg.addColorStop(0, 'rgba(120,0,180,0.25)'); rg.addColorStop(1, 'transparent');
-    ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
-    ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    for (let i = 0; i < 30; i++) {
-      ctx.beginPath(); ctx.arc(sr(i*3)*W, sr(i*3+1)*H, sr(i*3+2)*1.5+.5, 0, Math.PI*2); ctx.fill();
-    }
-  },
-  clean(ctx) {
-    ctx.fillStyle = '#080810'; ctx.fillRect(0, 0, W, H);
-    ctx.strokeStyle = 'rgba(255,255,255,0.03)'; ctx.lineWidth = 1;
-    for (let y = 0; y < H; y += 20) {
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
-    }
-    ctx.strokeStyle = 'rgba(74,158,255,0.18)'; ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.moveTo(0, VID_Y-2); ctx.lineTo(W, VID_Y-2); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(0, BOT_Y+2); ctx.lineTo(W, BOT_Y+2); ctx.stroke();
-  },
-  energy(ctx) {
+    // Deep space: dark with aurora bands and star field
     const g = ctx.createLinearGradient(0, 0, W, H);
-    g.addColorStop(0, '#001a00'); g.addColorStop(1, '#000');
+    g.addColorStop(0,   '#020008');
+    g.addColorStop(0.4, '#0d0020');
+    g.addColorStop(1,   '#000508');
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-    ctx.strokeStyle = 'rgba(57,255,20,0.06)'; ctx.lineWidth = 1;
-    for (let i = -H; i < W+H; i += 22) {
-      ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i+H, H); ctx.stroke();
+
+    // Aurora band 1
+    const a1 = ctx.createLinearGradient(0, H * 0.1, 0, H * 0.5);
+    a1.addColorStop(0, 'transparent');
+    a1.addColorStop(0.4, 'rgba(120, 0, 255, 0.12)');
+    a1.addColorStop(0.6, 'rgba(0, 180, 255, 0.08)');
+    a1.addColorStop(1, 'transparent');
+    ctx.fillStyle = a1; ctx.fillRect(0, 0, W, H);
+
+    // Aurora band 2
+    const a2 = ctx.createLinearGradient(W, H * 0.5, 0, H);
+    a2.addColorStop(0, 'transparent');
+    a2.addColorStop(0.3, 'rgba(255, 0, 120, 0.08)');
+    a2.addColorStop(0.6, 'rgba(80, 0, 220, 0.1)');
+    a2.addColorStop(1, 'transparent');
+    ctx.fillStyle = a2; ctx.fillRect(0, 0, W, H);
+
+    // Star field
+    for (let i = 0; i < 80; i++) {
+      const brightness = sr(i * 3 + 2);
+      ctx.fillStyle = `rgba(255,255,255,${brightness * 0.6 + 0.1})`;
+      const size = sr(i * 3) * 1.8 + 0.3;
+      ctx.beginPath();
+      ctx.arc(sr(i * 3 + 1) * W, sr(i * 3 + 2) * H, size, 0, Math.PI * 2);
+      ctx.fill();
     }
-    const rg = ctx.createRadialGradient(W/2, H*.5, 0, W/2, H*.5, W*.7);
-    rg.addColorStop(0, 'rgba(57,255,20,0.12)'); rg.addColorStop(1, 'transparent');
-    ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
+
+    // Glow orb
+    const orb = ctx.createRadialGradient(W * 0.5, H * 0.42, 0, W * 0.5, H * 0.42, W * 0.7);
+    orb.addColorStop(0,   'rgba(100, 0, 200, 0.15)');
+    orb.addColorStop(0.5, 'rgba(0, 80, 200, 0.06)');
+    orb.addColorStop(1,   'transparent');
+    ctx.fillStyle = orb; ctx.fillRect(0, 0, W, H);
   },
+
+  clean(ctx) {
+    // Minimal cyber: dark with thin neon grid
+    ctx.fillStyle = '#03050f'; ctx.fillRect(0, 0, W, H);
+
+    // Perspective grid
+    const vp = { x: W / 2, y: H * 0.5 };
+    ctx.strokeStyle = 'rgba(0, 180, 255, 0.07)'; ctx.lineWidth = 1;
+    for (let i = -6; i <= 6; i++) {
+      ctx.beginPath();
+      ctx.moveTo(vp.x + i * 60, 0);
+      ctx.lineTo(vp.x + i * 300, H);
+      ctx.stroke();
+    }
+    for (let y = 0; y < H; y += 40) {
+      const progress = y / H;
+      const left  = vp.x - 360 * progress;
+      const right = vp.x + 360 * progress;
+      ctx.beginPath(); ctx.moveTo(left, y); ctx.lineTo(right, y); ctx.stroke();
+    }
+
+    // Accent lines at video boundaries
+    const lineGrad1 = ctx.createLinearGradient(0, 0, W, 0);
+    lineGrad1.addColorStop(0, 'transparent');
+    lineGrad1.addColorStop(0.3, 'rgba(0, 200, 255, 0.7)');
+    lineGrad1.addColorStop(0.7, 'rgba(120, 0, 255, 0.7)');
+    lineGrad1.addColorStop(1, 'transparent');
+    ctx.strokeStyle = lineGrad1; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(0, VID_Y - 2); ctx.lineTo(W, VID_Y - 2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, BOT_Y + 2); ctx.lineTo(W, BOT_Y + 2); ctx.stroke();
+
+    // Subtle glow
+    const glow = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, W);
+    glow.addColorStop(0, 'rgba(0, 120, 255, 0.05)');
+    glow.addColorStop(1, 'transparent');
+    ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
+  },
+
+  energy(ctx) {
+    // High-voltage: electric plasma effect
+    ctx.fillStyle = '#000a00'; ctx.fillRect(0, 0, W, H);
+
+    // Base gradient
+    const base = ctx.createLinearGradient(0, 0, W, H);
+    base.addColorStop(0, 'rgba(0,40,0,0.9)');
+    base.addColorStop(0.5, 'rgba(0,20,10,0.9)');
+    base.addColorStop(1, 'rgba(0,5,20,0.9)');
+    ctx.fillStyle = base; ctx.fillRect(0, 0, W, H);
+
+    // Plasma streaks
+    for (let i = 0; i < 8; i++) {
+      const x = sr(i * 7 + 1) * W;
+      const yStart = sr(i * 7 + 2) * H * 0.3;
+      const yEnd   = yStart + sr(i * 7 + 3) * H * 0.6 + H * 0.2;
+      const streak = ctx.createLinearGradient(x, yStart, x + 20, yEnd);
+      streak.addColorStop(0, 'transparent');
+      streak.addColorStop(0.3, `rgba(57,255,20,${0.06 + sr(i * 7 + 4) * 0.06})`);
+      streak.addColorStop(0.7, `rgba(0,255,180,${0.04 + sr(i * 7 + 5) * 0.04})`);
+      streak.addColorStop(1, 'transparent');
+      ctx.strokeStyle = streak; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(x, yStart); ctx.lineTo(x + 15, yEnd); ctx.stroke();
+    }
+
+    // Central energy orb
+    const orb = ctx.createRadialGradient(W/2, H * 0.5, 0, W/2, H * 0.5, W * 0.5);
+    orb.addColorStop(0,   'rgba(57, 255, 20, 0.18)');
+    orb.addColorStop(0.4, 'rgba(0, 255, 100, 0.08)');
+    orb.addColorStop(1,   'transparent');
+    ctx.fillStyle = orb; ctx.fillRect(0, 0, W, H);
+
+    // Scan lines
+    ctx.fillStyle = 'rgba(0,0,0,0.15)';
+    for (let y = 0; y < H; y += 3) ctx.fillRect(0, y, W, 1);
+  },
+
   luxury(ctx) {
-    const g = ctx.createLinearGradient(0, 0, 0, H);
-    g.addColorStop(0, '#0a0800'); g.addColorStop(1, '#000');
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-    ctx.fillStyle = 'rgba(255,215,0,0.07)';
-    for (let i = 0; i < 50; i++) {
-      ctx.beginPath(); ctx.arc(sr(i*7+3)*W, sr(i*7+4)*H, 1.5, 0, Math.PI*2); ctx.fill();
+    // Gold & obsidian: premium dark with metallic sheen
+    ctx.fillStyle = '#060400'; ctx.fillRect(0, 0, W, H);
+
+    // Deep radial bg
+    const bg = ctx.createRadialGradient(W/2, H*0.4, 0, W/2, H*0.4, W * 1.1);
+    bg.addColorStop(0,   'rgba(60, 40, 0, 0.8)');
+    bg.addColorStop(0.5, 'rgba(20, 12, 0, 0.6)');
+    bg.addColorStop(1,   'transparent');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+
+    // Diagonal light sweep
+    const sweep = ctx.createLinearGradient(0, 0, W, H);
+    sweep.addColorStop(0, 'transparent');
+    sweep.addColorStop(0.4, 'rgba(255, 200, 50, 0.04)');
+    sweep.addColorStop(0.5, 'rgba(255, 220, 100, 0.08)');
+    sweep.addColorStop(0.6, 'rgba(255, 200, 50, 0.04)');
+    sweep.addColorStop(1, 'transparent');
+    ctx.fillStyle = sweep; ctx.fillRect(0, 0, W, H);
+
+    // Gold dust particles
+    for (let i = 0; i < 60; i++) {
+      const size = sr(i * 7 + 3) * 2.5 + 0.5;
+      const alpha = sr(i * 7 + 4) * 0.5 + 0.1;
+      ctx.fillStyle = `rgba(255,215,0,${alpha})`;
+      ctx.beginPath();
+      ctx.arc(sr(i * 7 + 5) * W, sr(i * 7 + 6) * H, size, 0, Math.PI * 2);
+      ctx.fill();
     }
-    const rg = ctx.createRadialGradient(W/2, H*.5, 0, W/2, H*.5, W*.7);
-    rg.addColorStop(0, 'rgba(255,215,0,0.1)'); rg.addColorStop(1, 'transparent');
-    ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
+
+    // Thin gold accent lines
+    const gl = ctx.createLinearGradient(0, 0, W, 0);
+    gl.addColorStop(0, 'transparent');
+    gl.addColorStop(0.2, 'rgba(255,215,0,0.5)');
+    gl.addColorStop(0.8, 'rgba(255,180,0,0.5)');
+    gl.addColorStop(1, 'transparent');
+    ctx.strokeStyle = gl; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, VID_Y - 1); ctx.lineTo(W, VID_Y - 1); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, BOT_Y + 1); ctx.lineTo(W, BOT_Y + 1); ctx.stroke();
   },
+
   street(ctx) {
-    ctx.fillStyle = '#060606'; ctx.fillRect(0, 0, W, H);
-    for (let i = 0; i < 150; i++) {
-      ctx.fillStyle = `rgba(255,255,255,${sr(i*5+2)*0.07})`;
-      ctx.fillRect(sr(i*5)*W, sr(i*5+1)*H, 2, 2);
+    // Urban glitch: lo-fi city vibes with neon pink/cyan
+    ctx.fillStyle = '#040408'; ctx.fillRect(0, 0, W, H);
+
+    // Noise texture
+    for (let i = 0; i < 200; i++) {
+      const a = sr(i * 5 + 2) * 0.08;
+      ctx.fillStyle = `rgba(255,255,255,${a})`;
+      ctx.fillRect(sr(i * 5) * W, sr(i * 5 + 1) * H, 2, 2);
     }
-    ctx.strokeStyle = 'rgba(255,69,0,0.35)'; ctx.lineWidth = 3;
-    ctx.beginPath(); ctx.moveTo(0, VID_Y-4); ctx.lineTo(W*0.55, VID_Y-4); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(W, BOT_Y+4); ctx.lineTo(W*0.45, BOT_Y+4); ctx.stroke();
+
+    // Glitch horizontal bands
+    for (let i = 0; i < 5; i++) {
+      const y = sr(i * 11 + 7) * H;
+      const h = sr(i * 11 + 8) * 4 + 1;
+      const shift = (sr(i * 11 + 9) - 0.5) * 20;
+      ctx.fillStyle = `rgba(255, 0, 100, ${0.04 + sr(i * 11 + 10) * 0.04})`;
+      ctx.fillRect(shift, y, W, h);
+    }
+
+    // Neon side bars
+    const leftBar = ctx.createLinearGradient(0, 0, 8, 0);
+    leftBar.addColorStop(0, 'rgba(255, 0, 128, 0.5)');
+    leftBar.addColorStop(1, 'transparent');
+    ctx.fillStyle = leftBar; ctx.fillRect(0, 0, 8, H);
+
+    const rightBar = ctx.createLinearGradient(W - 8, 0, W, 0);
+    rightBar.addColorStop(0, 'transparent');
+    rightBar.addColorStop(1, 'rgba(0, 255, 200, 0.5)');
+    ctx.fillStyle = rightBar; ctx.fillRect(W - 8, 0, 8, H);
+
+    // Accent lines
+    ctx.strokeStyle = 'rgba(255, 0, 128, 0.5)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(0, VID_Y - 4); ctx.lineTo(W * 0.6, VID_Y - 4); ctx.stroke();
+    ctx.strokeStyle = 'rgba(0, 255, 200, 0.5)';
+    ctx.beginPath(); ctx.moveTo(W, BOT_Y + 4); ctx.lineTo(W * 0.4, BOT_Y + 4); ctx.stroke();
   },
 };
 const PATTERN_KEYS = Object.keys(PATTERNS);
 
-function getPattern(mode: string, idx: number): PatternFn {
+export function getPattern(mode: string, idx: number): PatternFn {
   if (mode === 'random') return PATTERNS[PATTERN_KEYS[idx % PATTERN_KEYS.length]];
   return PATTERNS[mode] ?? PATTERNS.dramatic;
 }
@@ -209,19 +347,19 @@ export function drawFrame(
     ctx.fillStyle = '#000'; ctx.fillRect(0, VID_Y, W, VID_H);
     ctx.drawImage(videoEl, dx, dy, dw, dh);
   } else {
-    ctx.fillStyle = '#111'; ctx.fillRect(0, VID_Y, W, VID_H);
+    ctx.fillStyle = '#0a0a14'; ctx.fillRect(0, VID_Y, W, VID_H);
     ctx.fillStyle = 'rgba(255,255,255,0.08)';
     ctx.font = '13px sans-serif'; ctx.textAlign = 'center';
     ctx.fillText('動画をアップロードしてください', W/2, VID_Y + VID_H/2);
   }
 
-  // Gradients
-  const topGrad = ctx.createLinearGradient(0, 0, 0, VID_Y + 70);
-  topGrad.addColorStop(0, 'rgba(0,0,0,0.9)'); topGrad.addColorStop(1, 'transparent');
-  ctx.fillStyle = topGrad; ctx.fillRect(0, 0, W, VID_Y + 70);
-  const botGrad = ctx.createLinearGradient(0, BOT_Y - 70, 0, H);
-  botGrad.addColorStop(0, 'transparent'); botGrad.addColorStop(1, 'rgba(0,0,0,0.93)');
-  ctx.fillStyle = botGrad; ctx.fillRect(0, BOT_Y - 70, W, H - BOT_Y + 70);
+  // Gradients over video edges
+  const topGrad = ctx.createLinearGradient(0, 0, 0, VID_Y + 80);
+  topGrad.addColorStop(0, 'rgba(0,0,0,0.92)'); topGrad.addColorStop(1, 'transparent');
+  ctx.fillStyle = topGrad; ctx.fillRect(0, 0, W, VID_Y + 80);
+  const botGrad = ctx.createLinearGradient(0, BOT_Y - 80, 0, H);
+  botGrad.addColorStop(0, 'transparent'); botGrad.addColorStop(1, 'rgba(0,0,0,0.95)');
+  ctx.fillStyle = botGrad; ctx.fillRect(0, BOT_Y - 80, W, H - BOT_Y + 80);
 
   // Title
   const MAX_TEXT_W = W - 40;
@@ -281,7 +419,7 @@ export function drawFrame(
   }
 
   // AI badge
-  ctx.fillStyle = 'rgba(124,58,237,0.8)';
+  ctx.fillStyle = 'rgba(124,58,237,0.85)';
   rr(ctx, W-88, H-40, 68, 26, 6); ctx.fill();
   ctx.font = '600 12px "Noto Sans JP",sans-serif';
   ctx.textAlign = 'center'; ctx.fillStyle = '#fff';
@@ -296,51 +434,137 @@ export function drawOutroFrame(
   elapsed: number,
   totalDuration: number,
   outro: OutroState,
+  videoEl?: HTMLVideoElement | null,
 ) {
+  const totalD = totalDuration > 0 ? totalDuration : 5;
+
+  // ── video outro ──
+  if (outro.mode === 'video' && videoEl && videoEl.readyState >= 2) {
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+    const vw = videoEl.videoWidth || W;
+    const vh = videoEl.videoHeight || H;
+    const scale = Math.max(W / vw, H / vh);
+    const dw = vw * scale, dh = vh * scale;
+    ctx.drawImage(videoEl, (W - dw) / 2, (H - dh) / 2, dw, dh);
+    // Progress bar
+    const prog = Math.min(elapsed / totalD, 1);
+    ctx.fillStyle = 'rgba(0,0,0,0.4)'; ctx.fillRect(0, H - 8, W, 8);
+    const barGrad = ctx.createLinearGradient(0, 0, W * prog, 0);
+    barGrad.addColorStop(0, '#7c3aed'); barGrad.addColorStop(1, '#06b6d4');
+    ctx.fillStyle = barGrad; ctx.fillRect(0, H - 8, W * prog, 8);
+    return;
+  }
+
+  // ── text outro ──
+  const fadeIn   = Math.min(1, elapsed / 0.6);
+  const fadeOut  = elapsed > totalD - 0.5 ? Math.max(0, (totalD - elapsed) / 0.5) : 1;
+  const opacity  = fadeIn * fadeOut;
+
+  // Background
   ctx.fillStyle = outro.bgColor; ctx.fillRect(0, 0, W, H);
-  const rg = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, W*0.9);
-  rg.addColorStop(0, 'rgba(124,58,237,0.18)'); rg.addColorStop(1, 'transparent');
-  ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
-  ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 1;
-  for (let y = 0; y < H; y += 22) {
+
+  // Animated radial pulse
+  const pulseScale = 0.8 + Math.sin(elapsed * 1.5) * 0.08;
+  const orb = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, W * pulseScale);
+  orb.addColorStop(0,   'rgba(124, 58, 237, 0.2)');
+  orb.addColorStop(0.4, 'rgba(6, 182, 212, 0.08)');
+  orb.addColorStop(1,   'transparent');
+  ctx.fillStyle = orb; ctx.fillRect(0, 0, W, H);
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)'; ctx.lineWidth = 1;
+  for (let y = 0; y < H; y += 28) {
     ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
   }
-  const opacity = Math.min(1, elapsed * 2);
+  for (let x = 0; x < W; x += 28) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+
+  // Glow corner accents
+  const cornerAccent = (x: number, y: number, ax: number, ay: number) => {
+    const cg = ctx.createRadialGradient(x, y, 0, x, y, 120);
+    cg.addColorStop(0, 'rgba(124,58,237,0.25)');
+    cg.addColorStop(1, 'transparent');
+    ctx.fillStyle = cg; ctx.fillRect(ax, ay, 120, 120);
+  };
+  cornerAccent(0, 0, 0, 0);
+  cornerAccent(W, H, W - 120, H - 120);
+
   ctx.globalAlpha = opacity;
-  const iconY = H * 0.28;
-  ctx.fillStyle = '#ff0000';
-  rr(ctx, W/2 - 54, iconY - 30, 108, 60, 12); ctx.fill();
-  ctx.fillStyle = '#fff'; ctx.font = '700 28px sans-serif'; ctx.textAlign = 'center';
-  ctx.fillText('▶', W/2 + 2, iconY + 12);
-  ctx.fillStyle = '#ffffff';
-  let cSize = 40;
+
+  // Subscribe button
+  const btnY = H * 0.29;
+  const btnW = 200, btnH = 64;
+  const btnX = W/2 - btnW/2;
+  const btnGrad = ctx.createLinearGradient(btnX, 0, btnX + btnW, 0);
+  btnGrad.addColorStop(0, '#ff0000');
+  btnGrad.addColorStop(1, '#cc0000');
+  ctx.fillStyle = btnGrad;
+  rr(ctx, btnX, btnY - btnH/2, btnW, btnH, 16); ctx.fill();
+
+  // Play icon inside button
+  ctx.fillStyle = '#fff';
+  ctx.beginPath();
+  ctx.moveTo(W/2 - 16, btnY - 16);
+  ctx.lineTo(W/2 - 16, btnY + 16);
+  ctx.lineTo(W/2 + 18, btnY);
+  ctx.closePath(); ctx.fill();
+
+  // Channel name
   const chName = outro.channel || 'CHANNEL NAME';
+  ctx.fillStyle = '#ffffff';
+  let cSize = 44;
   ctx.font = `900 ${cSize}px "Noto Sans JP",sans-serif`;
-  ctx.shadowColor = 'rgba(0,0,0,0.8)'; ctx.shadowBlur = 16;
-  while (cSize > 20 && ctx.measureText(chName).width > W - 60) {
+  ctx.textAlign = 'center';
+  ctx.shadowColor = 'rgba(0,0,0,0.8)'; ctx.shadowBlur = 20;
+  while (cSize > 18 && ctx.measureText(chName).width > W - 64) {
     cSize -= 2; ctx.font = `900 ${cSize}px "Noto Sans JP",sans-serif`;
   }
-  ctx.fillText(chName, W/2, H * 0.48); ctx.shadowBlur = 0;
-  ctx.strokeStyle = 'rgba(255,255,255,0.25)'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(W*0.2, H*0.52); ctx.lineTo(W*0.8, H*0.52); ctx.stroke();
+  ctx.fillText(chName, W/2, H * 0.49);
+  ctx.shadowBlur = 0;
+
+  // Divider
+  const divGrad = ctx.createLinearGradient(W * 0.15, 0, W * 0.85, 0);
+  divGrad.addColorStop(0, 'transparent');
+  divGrad.addColorStop(0.3, 'rgba(255,255,255,0.4)');
+  divGrad.addColorStop(0.7, 'rgba(255,255,255,0.4)');
+  divGrad.addColorStop(1, 'transparent');
+  ctx.strokeStyle = divGrad; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(W*0.15, H*0.535); ctx.lineTo(W*0.85, H*0.535); ctx.stroke();
+
+  // Sub text
   if (outro.sub) {
-    ctx.fillStyle = 'rgba(255,255,255,0.8)';
-    let subSize = 22;
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    let subSize = 24;
     ctx.font = `400 ${subSize}px "Noto Sans JP",sans-serif`;
-    while (subSize > 14 && ctx.measureText(outro.sub).width > W - 60) {
+    while (subSize > 14 && ctx.measureText(outro.sub).width > W - 64) {
       subSize -= 1; ctx.font = `400 ${subSize}px "Noto Sans JP",sans-serif`;
     }
-    ctx.fillText(outro.sub, W/2, H * 0.57);
+    ctx.fillText(outro.sub, W/2, H * 0.585);
   }
+
+  // SNS
   if (outro.sns) {
-    ctx.fillStyle = 'rgba(255,255,255,0.5)';
-    ctx.font = '600 18px "Noto Sans JP",sans-serif';
-    ctx.fillText(outro.sns, W/2, H * 0.63);
+    ctx.fillStyle = 'rgba(255,255,255,0.55)';
+    ctx.font = '500 20px "Noto Sans JP",sans-serif';
+    ctx.fillText(outro.sns, W/2, H * 0.64);
   }
+
+  // Subscribe prompt (animated pulse)
+  const subAlpha = 0.7 + Math.sin(elapsed * 3) * 0.3;
+  ctx.fillStyle = `rgba(255,255,255,${subAlpha * opacity})`;
+  ctx.font = '700 22px "Noto Sans JP",sans-serif';
+  ctx.fillText('チャンネル登録お願いします！', W/2, H * 0.76);
+
   ctx.globalAlpha = 1;
-  const prog = Math.min(elapsed / totalDuration, 1);
-  ctx.fillStyle = 'rgba(255,255,255,0.15)'; ctx.fillRect(0, H-6, W, 6);
-  ctx.fillStyle = '#7c3aed'; ctx.fillRect(0, H-6, W * prog, 6);
+
+  // Progress bar (gradient)
+  const prog = Math.min(elapsed / totalD, 1);
+  ctx.fillStyle = 'rgba(255,255,255,0.1)'; ctx.fillRect(0, H - 8, W, 8);
+  const barGrad = ctx.createLinearGradient(0, 0, W * prog, 0);
+  barGrad.addColorStop(0, '#7c3aed');
+  barGrad.addColorStop(1, '#06b6d4');
+  ctx.fillStyle = barGrad; ctx.fillRect(0, H - 8, W * prog, 8);
 }
 
 // ── scene analysis ────────────────────────────────────────────

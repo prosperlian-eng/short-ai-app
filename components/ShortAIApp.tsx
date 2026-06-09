@@ -94,6 +94,8 @@ export function ShortAIApp() {
 
   const sourceVideoRef = useRef<HTMLVideoElement>(null);
   const outroCanvasRef = useRef<HTMLCanvasElement>(null);
+  const outroAnimRef = useRef<number | null>(null);
+  const outroVideoRef = useRef<HTMLVideoElement | null>(null);
   const cardDataRef = useRef<CardData[]>([]);
   const resultsRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
@@ -173,17 +175,43 @@ export function ShortAIApp() {
     if (sourceVideoRef.current) { sourceVideoRef.current.src = url; sourceVideoRef.current.style.display = 'block'; }
   };
 
-  // ── outro preview ──
-  const refreshOutroPreview = useCallback(() => {
+  // ── outro animated preview ──
+  const startOutroPreview = useCallback(() => {
     const canvas = outroCanvasRef.current; if (!canvas) return;
     canvas.width = 270; canvas.height = 480;
-    const ctx = canvas.getContext('2d'); if (!ctx) return;
-    ctx.save(); ctx.scale(270/W, 480/H);
-    drawOutroFrame(ctx, 2, 5, outro);
-    ctx.restore();
+    if (outroAnimRef.current) cancelAnimationFrame(outroAnimRef.current);
+
+    const PREVIEW_DUR = 6;
+    const startTime = performance.now();
+
+    const tick = () => {
+      const elapsed = ((performance.now() - startTime) / 1000) % PREVIEW_DUR;
+      const ctx = canvas.getContext('2d'); if (!ctx) return;
+      ctx.save(); ctx.scale(270/W, 480/H);
+      const vidEl = outro.mode === 'video' ? outroVideoRef.current : null;
+      drawOutroFrame(ctx, elapsed, PREVIEW_DUR, outro, vidEl);
+      ctx.restore();
+      outroAnimRef.current = requestAnimationFrame(tick);
+    };
+    outroAnimRef.current = requestAnimationFrame(tick);
   }, [outro]);
 
-  useEffect(() => { if (outro.mode === 'text') refreshOutroPreview(); }, [outro, refreshOutroPreview]);
+  useEffect(() => {
+    if (outro.mode === 'none') {
+      if (outroAnimRef.current) { cancelAnimationFrame(outroAnimRef.current); outroAnimRef.current = null; }
+      return;
+    }
+    // For video outro: load the video element
+    if (outro.mode === 'video' && outro.videoURL) {
+      const vid = document.createElement('video');
+      vid.src = outro.videoURL; vid.muted = true; vid.loop = true; vid.preload = 'auto';
+      vid.addEventListener('loadeddata', () => { vid.play().catch(() => {}); outroVideoRef.current = vid; startOutroPreview(); }, { once: true });
+      vid.load();
+      return;
+    }
+    startOutroPreview();
+    return () => { if (outroAnimRef.current) cancelAnimationFrame(outroAnimRef.current); };
+  }, [outro, startOutroPreview]);
 
   // ── draw thumbnail ──
   const drawThumbnail = useCallback((canvas: HTMLCanvasElement, videoURL: string | null, seekTime: number, title: string, patIdx: number) => {
@@ -444,7 +472,7 @@ export function ShortAIApp() {
             } else {
               const outroElapsed = (ts - (outroWall ?? ts)) / 1000;
               if (outroElapsed >= outroDur) { recorder.stop(); return; }
-              drawOutroFrame(ctx, outroElapsed, outroDur, outro);
+              drawOutroFrame(ctx, outroElapsed, outroDur, outro, outroVideoRef.current);
             }
             requestAnimationFrame(tick);
           };
