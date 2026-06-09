@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerClient, createAdminClient } from '@/lib/supabase/server';
+import { createClient, createAdminClient } from '@/lib/supabase/server';
 
 const ADMIN_EMAIL = 'prosper.lian@gmail.com';
 
 export async function POST(req: NextRequest) {
-  const supabase = await createServerClient();
+  const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user || user.email !== ADMIN_EMAIL) {
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid params' }, { status: 400 });
   }
 
-  const admin = createAdminClient();
+  const admin = await createAdminClient();
   const { error } = await admin
     .from('profiles')
     .update({ plan, updated_at: new Date().toISOString() })

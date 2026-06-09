@@ -1,18 +1,17 @@
 import { NextResponse } from 'next/server';
-import { createServerClient } from '@/lib/supabase/server';
-import { createAdminClient } from '@/lib/supabase/server';
+import { createClient, createAdminClient } from '@/lib/supabase/server';
 
 const ADMIN_EMAIL = 'prosper.lian@gmail.com';
 
 export async function GET() {
-  const supabase = await createServerClient();
+  const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user || user.email !== ADMIN_EMAIL) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const admin = createAdminClient();
+  const admin = await createAdminClient();
 
   // Get all profiles
   const { data: profiles } = await admin
