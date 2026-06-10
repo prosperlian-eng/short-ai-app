@@ -5,8 +5,25 @@
   --text: #f1f1f5; --muted: #6b7280; --radius: 16px; --radius-sm: 10px;
 }
 html { scroll-behavior: smooth; }
-body { background: var(--bg); color: var(--text); font-family: -apple-system,'Hiragino Sans','Noto Sans JP',sans-serif; min-height: 100vh; line-height: 1.6; }
-.hero { text-align: center; padding: 80px 24px 60px; background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(124,58,237,0.25) 0%, transparent 70%); border-bottom: 1px solid var(--border); position: relative; }
+body {
+  color: var(--text); font-family: -apple-system,'Hiragino Sans','Noto Sans JP',sans-serif; min-height: 100vh; line-height: 1.6;
+  background-color: #06060c;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 0%, rgba(124,58,237,0.22) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 45% at 85% 15%, rgba(6,182,212,0.16) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(124,58,237,0.12) 0%, transparent 60%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 40px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 40px);
+  background-attachment: fixed;
+}
+.hero { text-align: center; padding: 80px 24px 60px; background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(124,58,237,0.3) 0%, transparent 70%); border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+.hero::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 60% 60% at 50% 0%, #000 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 0%, #000 0%, transparent 70%);
+}
 .hero-badge { display: inline-block; background: linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; font-size:11px; font-weight:700; letter-spacing:.2em; padding:4px 14px; border-radius:999px; margin-bottom:20px; }
 .hero-title { font-size: clamp(48px,8vw,80px); font-weight:900; letter-spacing:-0.03em; background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,0.6) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; line-height:1; margin-bottom:4px; }
 .hero-dot { -webkit-text-fill-color:#7c3aed; }
@@ -16,7 +33,7 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system,'Hi
 .locale-btn:hover { border-color:var(--accent); color:var(--text); }
 .locale-btn.active { background:rgba(124,58,237,0.2); border-color:var(--accent); color:#c4b5fd; }
 .app-container { max-width:900px; margin:0 auto; padding:48px 24px 80px; display:flex; flex-direction:column; gap:24px; }
-.card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:32px; position:relative; transition:border-color 0.2s; }
+.card { background:rgba(17,17,24,0.6); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:var(--radius); padding:32px; position:relative; transition:border-color 0.2s, box-shadow 0.2s; box-shadow:0 8px 32px rgba(0,0,0,0.25); }
 .card:hover { border-color:rgba(124,58,237,0.3); }
 .center-card { text-align:center; }
 .step-badge { display:inline-block; background:rgba(124,58,237,0.15); color:#a78bfa; font-size:11px; font-weight:700; letter-spacing:.15em; padding:3px 10px; border-radius:999px; margin-bottom:12px; border:1px solid rgba(124,58,237,0.3); }
