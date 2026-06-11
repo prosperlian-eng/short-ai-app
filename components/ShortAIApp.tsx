@@ -114,6 +114,9 @@ export function ShortAIApp() {
 
   const [state, setState] = useState<AppState>(defaultState);
   const [outro, setOutro] = useState<OutroState>(defaultOutro);
+  // カードのDOMイベントリスナーは生成時のクロージャを掴むため、常に最新の設定を参照できるようrefを併用する
+  const stateRef = useRef(state); stateRef.current = state;
+  const outroRef = useRef(outro); outroRef.current = outro;
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState('');
   const [loadingSub, setLoadingSub] = useState('');
@@ -255,13 +258,14 @@ export function ShortAIApp() {
     return new Promise<void>(resolve => {
       const ctx = canvas.getContext('2d'); if (!ctx) { resolve(); return; }
       canvas.width = OUT_W; canvas.height = OUT_H;
-      if (!videoURL) { drawFrame(ctx, null, title, 0, 0, state, { patIdx }); resolve(); return; }
+      const st = stateRef.current;
+      if (!videoURL) { drawFrame(ctx, null, title, 0, 0, st, { patIdx }); resolve(); return; }
       const tmp = document.createElement('video');
       tmp.src = videoURL; tmp.muted = true; tmp.preload = 'auto';
       let done = false;
       const finish = () => {
         if (done) return; done = true;
-        drawFrame(ctx, tmp, title, 0, 0, state, { patIdx, pattern: state.pattern });
+        drawFrame(ctx, tmp, title, 0, 0, stateRef.current, { patIdx, pattern: stateRef.current.pattern });
         resolve();
       };
       tmp.addEventListener('seeked', finish, { once: true });
@@ -272,7 +276,7 @@ export function ShortAIApp() {
       }, { once: true });
       tmp.load();
     });
-  }, [state]);
+  }, []);
 
   // ── generate ──
   const handleGenerate = async () => {
@@ -449,11 +453,11 @@ export function ShortAIApp() {
   const togglePreview = (idx: number) => {
     const d = cardDataRef.current[idx]; if (!d) return;
     if (d.playing) { stopPreview(idx); return; }
-    if (!state.videoURL) { showToast(t('toast.uploadFirst')); return; }
+    if (!stateRef.current.videoURL) { showToast(t('toast.uploadFirst')); return; }
     d.playing = true; d.playBtn!.innerHTML = '⏸'; d.playBtn!.classList.add('active');
     d.canvas.parentElement!.classList.add('is-playing');
     const vid = document.createElement('video');
-    vid.src = state.videoURL; vid.muted = false; vid.preload = 'auto'; d.previewVid = vid;
+    vid.src = stateRef.current.videoURL!; vid.muted = false; vid.preload = 'auto'; d.previewVid = vid;
     vid.addEventListener('loadeddata', () => {
       vid.currentTime = d.startTime;
       vid.addEventListener('seeked', () => {
@@ -463,7 +467,7 @@ export function ShortAIApp() {
           const elapsed = Math.max(0, vid.currentTime - d.startTime);
           if (elapsed >= d.clipDuration || vid.ended) { stopPreview(idx); return; }
           const ctx = d.canvas.getContext('2d')!;
-          drawFrame(ctx, vid, d.title, elapsed, d.clipDuration, state, { patIdx: d.patIdx });
+          drawFrame(ctx, vid, d.title, elapsed, d.clipDuration, stateRef.current, { patIdx: d.patIdx });
           d.animRaf = requestAnimationFrame(tick);
         };
         d.animRaf = requestAnimationFrame(tick);
@@ -480,17 +484,20 @@ export function ShortAIApp() {
     const pb = d.canvas.parentElement?.querySelector('.card-play-btn') as HTMLButtonElement | null;
     if (pb) { pb.innerHTML = '▶'; pb.classList.remove('active'); }
     d.canvas.parentElement?.classList.remove('is-playing');
-    drawThumbnail(d.canvas, state.videoURL, d.startTime, d.title, d.patIdx);
+    drawThumbnail(d.canvas, stateRef.current.videoURL, d.startTime, d.title, d.patIdx);
   };
 
   // ── record clip to webm blob (shared by download & YouTube upload) ──
   const recordShort = async (idx: number, onProgress?: (pct: number) => void): Promise<Blob> => {
     const d = cardDataRef.current[idx];
-    if (!d || !state.videoURL) throw new Error('no video');
+    // 録画開始時点の最新設定をスナップショット（DOMリスナー経由でも常に現在の設定を使う）
+    const st = stateRef.current;
+    const o = outroRef.current;
+    if (!d || !st.videoURL) throw new Error('no video');
     if (d.playing) stopPreview(idx);
     const canvas = document.createElement('canvas'); canvas.width = OUT_W; canvas.height = OUT_H;
     const ctx = canvas.getContext('2d')!;
-    const vid = document.createElement('video'); vid.src = state.videoURL; vid.preload = 'auto';
+    const vid = document.createElement('video'); vid.src = st.videoURL; vid.preload = 'auto';
     const startWall = Date.now();
     const timer = setInterval(() => {
       onProgress?.(Math.min(99, Math.round((Date.now()-startWall)/(d.clipDuration*1000)*100)));
@@ -518,8 +525,8 @@ export function ShortAIApp() {
             resolve(new Blob(chunks, { type: 'video/webm' }));
           };
           recorder.onerror = () => { audioCtx?.close(); reject(new Error('recorder error')); };
-          const outroDur = outro.mode !== 'none' ? outro.duration : 0;
-          const hookEnabled = state.hookEnabled && d.clipDuration > 4;
+          const outroDur = o.mode !== 'none' ? o.duration : 0;
+          const hookEnabled = st.hookEnabled && d.clipDuration > 4;
           const hookDur = hookEnabled ? Math.min(1.5, d.clipDuration * 0.25) : 0;
           const hookStart = Math.min(d.startTime + d.clipDuration * 0.65, Math.max(d.startTime, vid.duration - hookDur - 0.1));
           let phase: 'hook'|'main'|'outro' = hookEnabled ? 'hook' : 'main';
@@ -535,19 +542,19 @@ export function ShortAIApp() {
                 vid.currentTime = d.startTime;
                 return;
               }
-              drawFrame(ctx, vid, d.title, hookElapsed, hookDur, state, { patIdx: d.patIdx, hook: { elapsed: hookElapsed, duration: hookDur } });
+              drawFrame(ctx, vid, d.title, hookElapsed, hookDur, st, { patIdx: d.patIdx, hook: { elapsed: hookElapsed, duration: hookDur } });
             } else if (phase === 'main') {
               const elapsed = Math.max(0, vid.currentTime - d.startTime);
               if (elapsed >= d.clipDuration || vid.ended) {
                 vid.volume = 0;
                 if (outroDur > 0) { phase = 'outro'; outroWall = ts; } else { recorder.stop(); return; }
               } else {
-                drawFrame(ctx, vid, d.title, elapsed, d.clipDuration, state, { patIdx: d.patIdx });
+                drawFrame(ctx, vid, d.title, elapsed, d.clipDuration, st, { patIdx: d.patIdx });
               }
             } else {
               const outroElapsed = (ts - (outroWall ?? ts)) / 1000;
               if (outroElapsed >= outroDur) { recorder.stop(); return; }
-              drawOutroFrame(ctx, outroElapsed, outroDur, outro, outroVideoRef.current);
+              drawOutroFrame(ctx, outroElapsed, outroDur, o, outroVideoRef.current);
             }
             requestAnimationFrame(tick);
           };
@@ -563,7 +570,7 @@ export function ShortAIApp() {
 
   // ── download ──
   const downloadShort = async (idx: number, btn: HTMLButtonElement) => {
-    const d = cardDataRef.current[idx]; if (!d || !state.videoURL) { showToast(t('toast.uploadFirst')); return; }
+    const d = cardDataRef.current[idx]; if (!d || !stateRef.current.videoURL) { showToast(t('toast.uploadFirst')); return; }
     const origHTML = btn.innerHTML; btn.disabled = true;
     try {
       const blob = await recordShort(idx, pct => { btn.innerHTML = `${t('results.recording')} ${pct}%`; });
