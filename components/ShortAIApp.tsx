@@ -5,7 +5,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import type { AppState, OutroState, CardData, FontFamily, FontEffect, BorderStyle, PatternMode } from '@/lib/types';
 import { FONT_OPTIONS } from '@/lib/fonts';
-import { drawFrame, drawOutroFrame, analyzeScenes, fmtTime, W, H } from '@/lib/canvas';
+import { drawFrame, drawOutroFrame, analyzeScenes, fmtTime, W, H, OUT_W, OUT_H } from '@/lib/canvas';
 import { createClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
 import type { Plan } from '@/lib/plans';
@@ -217,7 +217,7 @@ export function ShortAIApp() {
   const drawThumbnail = useCallback((canvas: HTMLCanvasElement, videoURL: string | null, seekTime: number, title: string, patIdx: number) => {
     return new Promise<void>(resolve => {
       const ctx = canvas.getContext('2d'); if (!ctx) { resolve(); return; }
-      canvas.width = W; canvas.height = H;
+      canvas.width = OUT_W; canvas.height = OUT_H;
       if (!videoURL) { drawFrame(ctx, null, title, 0, 0, state, { patIdx }); resolve(); return; }
       const tmp = document.createElement('video');
       tmp.src = videoURL; tmp.muted = true; tmp.preload = 'auto';
@@ -422,7 +422,7 @@ export function ShortAIApp() {
     const origHTML = btn.innerHTML; btn.disabled = true;
     try {
       if (d.playing) stopPreview(idx);
-      const canvas = document.createElement('canvas'); canvas.width = W; canvas.height = H;
+      const canvas = document.createElement('canvas'); canvas.width = OUT_W; canvas.height = OUT_H;
       const ctx = canvas.getContext('2d')!;
       const vid = document.createElement('video'); vid.src = state.videoURL; vid.preload = 'auto';
       btn.innerHTML = `${t('results.recording')} 0%`;
@@ -445,7 +445,7 @@ export function ShortAIApp() {
           canvasStream.getVideoTracks().forEach(t => combined.addTrack(t));
           audioDest?.stream.getAudioTracks().forEach(t => combined.addTrack(t));
           const mimeType = ['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'].find(t => MediaRecorder.isTypeSupported(t)) || 'video/webm';
-          const recorder = new MediaRecorder(combined, { mimeType });
+          const recorder = new MediaRecorder(combined, { mimeType, videoBitsPerSecond: 8_000_000 });
           const chunks: Blob[] = [];
           recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
           recorder.onstop = () => {

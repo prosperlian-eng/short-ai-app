@@ -2,6 +2,10 @@ import type { AppState, OutroState, FontEffect, BorderStyle } from './types';
 import { buildFont } from './fonts';
 
 export const W = 540, H = 960;
+// Output canvases are rendered at SCALE× resolution (1080x1920) for crisper text/edges,
+// while all layout math below stays in the original 540x960 logical space.
+export const SCALE = 2;
+export const OUT_W = W * SCALE, OUT_H = H * SCALE;
 const TOP_H = H * 0.28;
 const VID_Y = H * 0.28;
 const VID_H = H * 0.44;
@@ -332,6 +336,9 @@ export function drawFrame(
   const ctaColor    = options.ctaColor    ?? state.ctaColor;
   const patIdx      = options.patIdx      ?? 0;
 
+  ctx.save();
+  ctx.scale(SCALE, SCALE);
+
   _seed = patIdx * 137 + 29;
 
   // Background
@@ -426,6 +433,7 @@ export function drawFrame(
   ctx.fillText('AI生成', W-54, H-22);
 
   drawBorder(ctx, borderStyle, borderColor);
+  ctx.restore();
 }
 
 // ── outro frame ───────────────────────────────────────────────
@@ -437,6 +445,9 @@ export function drawOutroFrame(
   videoEl?: HTMLVideoElement | null,
 ) {
   const totalD = totalDuration > 0 ? totalDuration : 5;
+
+  ctx.save();
+  ctx.scale(SCALE, SCALE);
 
   // ── video outro ──
   if (outro.mode === 'video' && videoEl && videoEl.readyState >= 2) {
@@ -452,6 +463,7 @@ export function drawOutroFrame(
     const barGrad = ctx.createLinearGradient(0, 0, W * prog, 0);
     barGrad.addColorStop(0, '#7c3aed'); barGrad.addColorStop(1, '#06b6d4');
     ctx.fillStyle = barGrad; ctx.fillRect(0, H - 8, W * prog, 8);
+    ctx.restore();
     return;
   }
 
@@ -565,6 +577,7 @@ export function drawOutroFrame(
   barGrad.addColorStop(0, '#7c3aed');
   barGrad.addColorStop(1, '#06b6d4');
   ctx.fillStyle = barGrad; ctx.fillRect(0, H - 8, W * prog, 8);
+  ctx.restore();
 }
 
 // ── scene analysis ────────────────────────────────────────────
