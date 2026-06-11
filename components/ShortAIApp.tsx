@@ -187,7 +187,7 @@ export function ShortAIApp() {
     const tick = () => {
       const elapsed = ((performance.now() - startTime) / 1000) % PREVIEW_DUR;
       const ctx = canvas.getContext('2d'); if (!ctx) return;
-      ctx.save(); ctx.scale(270/W, 480/H);
+      ctx.save(); ctx.scale(270/OUT_W, 480/OUT_H);
       const vidEl = outro.mode === 'video' ? outroVideoRef.current : null;
       drawOutroFrame(ctx, elapsed, PREVIEW_DUR, outro, vidEl);
       ctx.restore();
