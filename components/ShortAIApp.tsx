@@ -13,6 +13,7 @@ import { canGenerate } from '@/lib/plans';
 import { AuthModal } from './AuthModal';
 import { PricingModal } from './PricingModal';
 import { UserMenu } from './UserMenu';
+import { YouTubeModal } from './YouTubeModal';
 
 const CATCHCOPIES = [
   'まさかの結果に\n全員驚愕。','これが本当の\n成長記録。','この一打、\n空気が変わった。',
@@ -126,6 +127,7 @@ export function ShortAIApp() {
   const [presetLoadOpen, setPresetLoadOpen] = useState(false);
   const [presetName, setPresetName] = useState('');
   const [presets, setPresets] = useState<Record<string, Partial<AppState>>>({});
+  const [ytIdx, setYtIdx] = useState<number | null>(null);
 
   const sourceVideoRef = useRef<HTMLVideoElement>(null);
   const outroCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -430,7 +432,11 @@ export function ShortAIApp() {
         titleInput.value = nt;
         await drawThumbnail(canvas, state.videoURL, startTime, nt, patIdx);
       });
-      actions.appendChild(dlBtn); actions.appendChild(regenBtn); card.appendChild(actions);
+      const ytBtn = document.createElement('button'); ytBtn.className = 'short-yt-btn';
+      ytBtn.innerHTML = '▶ YouTube';
+      ytBtn.title = locale !== 'ja' ? 'Upload to YouTube' : 'YouTubeにアップロード';
+      ytBtn.addEventListener('click', () => setYtIdx(i));
+      actions.appendChild(dlBtn); actions.appendChild(ytBtn); actions.appendChild(regenBtn); card.appendChild(actions);
       gridRef.current!.appendChild(card);
 
       setLoadingText(`${t('step3.generating')} (${i+1}/${n})`);
@@ -477,22 +483,20 @@ export function ShortAIApp() {
     drawThumbnail(d.canvas, state.videoURL, d.startTime, d.title, d.patIdx);
   };
 
-  // ── download ──
-  const downloadShort = async (idx: number, btn: HTMLButtonElement) => {
-    const d = cardDataRef.current[idx]; if (!d || !state.videoURL) { showToast(t('toast.uploadFirst')); return; }
-    const origHTML = btn.innerHTML; btn.disabled = true;
+  // ── record clip to webm blob (shared by download & YouTube upload) ──
+  const recordShort = async (idx: number, onProgress?: (pct: number) => void): Promise<Blob> => {
+    const d = cardDataRef.current[idx];
+    if (!d || !state.videoURL) throw new Error('no video');
+    if (d.playing) stopPreview(idx);
+    const canvas = document.createElement('canvas'); canvas.width = OUT_W; canvas.height = OUT_H;
+    const ctx = canvas.getContext('2d')!;
+    const vid = document.createElement('video'); vid.src = state.videoURL; vid.preload = 'auto';
+    const startWall = Date.now();
+    const timer = setInterval(() => {
+      onProgress?.(Math.min(99, Math.round((Date.now()-startWall)/(d.clipDuration*1000)*100)));
+    }, 400);
     try {
-      if (d.playing) stopPreview(idx);
-      const canvas = document.createElement('canvas'); canvas.width = OUT_W; canvas.height = OUT_H;
-      const ctx = canvas.getContext('2d')!;
-      const vid = document.createElement('video'); vid.src = state.videoURL; vid.preload = 'auto';
-      btn.innerHTML = `${t('results.recording')} 0%`;
-      const startWall = Date.now();
-      const timer = setInterval(() => {
-        const pct = Math.min(99, Math.round((Date.now()-startWall)/(d.clipDuration*1000)*100));
-        btn.innerHTML = `${t('results.recording')} ${pct}%`;
-      }, 400);
-      await new Promise<void>((resolve, reject) => {
+      return await new Promise<Blob>((resolve, reject) => {
         let audioCtx: AudioContext | undefined, audioDest: MediaStreamAudioDestinationNode | undefined;
         vid.addEventListener('loadeddata', () => {
           try {
@@ -511,12 +515,7 @@ export function ShortAIApp() {
           recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
           recorder.onstop = () => {
             audioCtx?.close();
-            const blob = new Blob(chunks, { type: 'video/webm' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.download = `short_${idx+1}.webm`; a.href = url; a.click();
-            setTimeout(() => URL.revokeObjectURL(url), 5000);
-            showToast(t('toast.downloaded', { name: `short_${idx+1}.webm` }));
-            resolve();
+            resolve(new Blob(chunks, { type: 'video/webm' }));
           };
           recorder.onerror = () => { audioCtx?.close(); reject(new Error('recorder error')); };
           const outroDur = outro.mode !== 'none' ? outro.duration : 0;
@@ -557,8 +556,22 @@ export function ShortAIApp() {
         }, { once: true });
         vid.load();
       });
+    } finally {
       clearInterval(timer);
-    } catch (e) {
+    }
+  };
+
+  // ── download ──
+  const downloadShort = async (idx: number, btn: HTMLButtonElement) => {
+    const d = cardDataRef.current[idx]; if (!d || !state.videoURL) { showToast(t('toast.uploadFirst')); return; }
+    const origHTML = btn.innerHTML; btn.disabled = true;
+    try {
+      const blob = await recordShort(idx, pct => { btn.innerHTML = `${t('results.recording')} ${pct}%`; });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.download = `short_${idx+1}.webm`; a.href = url; a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+      showToast(t('toast.downloaded', { name: `short_${idx+1}.webm` }));
+    } catch {
       showToast(t('toast.recordFailed'));
     }
     btn.innerHTML = origHTML; btn.disabled = false;
@@ -572,6 +585,14 @@ export function ShortAIApp() {
       await drawThumbnail(cardDataRef.current[i].canvas, state.videoURL, cardDataRef.current[i].startTime, copies[i], cardDataRef.current[i].patIdx);
     }
     showToast(t('toast.regenDone'));
+  };
+
+  // 現在の設定（色・フォント・縁取りなど）を生成済みカード全部に再適用
+  const applyStyleToAll = async () => {
+    for (const d of cardDataRef.current) {
+      await drawThumbnail(d.canvas, state.videoURL, d.startTime, d.title, d.patIdx);
+    }
+    showToast(locale !== 'ja' ? 'Style applied' : 'スタイルを反映しました');
   };
 
   const dlAll = async () => {
@@ -615,6 +636,22 @@ export function ShortAIApp() {
       {/* Modals */}
       <AuthModal open={showAuth} onClose={() => setShowAuth(false)} />
       <PricingModal open={showPricing} onClose={() => setShowPricing(false)} currentPlan={userPlan} />
+      <YouTubeModal
+        open={ytIdx !== null}
+        onClose={() => setYtIdx(null)}
+        locale={locale}
+        clipTitle={ytIdx !== null ? (cardDataRef.current[ytIdx]?.title ?? '') : ''}
+        captureFrames={async () => {
+          const d = ytIdx !== null ? cardDataRef.current[ytIdx] : null;
+          if (!d || !state.videoURL) return [];
+          const frames = await captureClipFrames(state.videoURL, [{ startTime: d.startTime, clipDuration: d.clipDuration }]);
+          return frames[0] ?? [];
+        }}
+        recordBlob={onProgress => {
+          if (ytIdx === null) return Promise.reject(new Error('no clip'));
+          return recordShort(ytIdx, onProgress);
+        }}
+      />
 
       {/* Hero */}
       <header className="hero">
@@ -908,6 +945,7 @@ export function ShortAIApp() {
             <div className="results-header">
               <h2 className="results-title">{t('results.title')}</h2>
               <div className="results-actions">
+                <button className="regen-btn" onClick={applyStyleToAll}>{locale !== 'ja' ? '🎨 Apply Style' : '🎨 スタイルを反映'}</button>
                 <button className="regen-btn" onClick={regenAllTitles}>{t('results.regenTitles')}</button>
                 <button className="regen-btn" onClick={dlAll}>{t('results.dlAll')}</button>
               </div>
