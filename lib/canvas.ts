@@ -642,7 +642,11 @@ export async function analyzeScenes(
       let prevData: Uint8ClampedArray | null = null;
       for (let t = 0; t < duration - clipLen; t += STEP) {
         await new Promise<void>(r => {
-          vid.addEventListener('seeked', () => r(), { once: true });
+          let done = false;
+          const finish = () => { if (!done) { done = true; r(); } };
+          // seeked may never fire if currentTime is already at t (e.g. first iteration at 0)
+          const guard = setTimeout(finish, 800);
+          vid.addEventListener('seeked', () => { clearTimeout(guard); finish(); }, { once: true });
           vid.currentTime = t;
         });
         actx.drawImage(vid, 0, 0, AW, AH);

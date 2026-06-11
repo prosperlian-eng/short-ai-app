@@ -221,11 +221,18 @@ export function ShortAIApp() {
       if (!videoURL) { drawFrame(ctx, null, title, 0, 0, state, { patIdx }); resolve(); return; }
       const tmp = document.createElement('video');
       tmp.src = videoURL; tmp.muted = true; tmp.preload = 'auto';
-      tmp.addEventListener('seeked', () => {
+      let done = false;
+      const finish = () => {
+        if (done) return; done = true;
         drawFrame(ctx, tmp, title, 0, 0, state, { patIdx, pattern: state.pattern });
         resolve();
+      };
+      tmp.addEventListener('seeked', finish, { once: true });
+      tmp.addEventListener('loadeddata', () => {
+        tmp.currentTime = seekTime;
+        // seeked may never fire if currentTime is already at seekTime (e.g. 0)
+        setTimeout(finish, 1000);
       }, { once: true });
-      tmp.addEventListener('loadeddata', () => { tmp.currentTime = seekTime; }, { once: true });
       tmp.load();
     });
   }, [state]);
@@ -374,7 +381,7 @@ export function ShortAIApp() {
 
       setLoadingText(`${t('step3.generating')} (${i+1}/${n})`);
       await drawThumbnail(canvas, state.videoURL, startTime, title, patIdx);
-      cardDataRef.current.push({ canvas, startTime, clipDuration, title, patIdx, playing: false, previewVid: null, animRaf: null });
+      cardDataRef.current.push({ canvas, startTime, clipDuration, title, patIdx, playing: false, previewVid: null, animRaf: null, playBtn });
     }
   };
 
