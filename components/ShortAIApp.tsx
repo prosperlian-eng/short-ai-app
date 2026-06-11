@@ -4,7 +4,7 @@ import { useRef, useState, useCallback, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import type { AppState, OutroState, CardData, FontFamily, FontEffect, BorderStyle, PatternMode } from '@/lib/types';
-import { FONT_OPTIONS } from '@/lib/fonts';
+import { FONT_OPTIONS, loadCustomGoogleFont } from '@/lib/fonts';
 import { drawFrame, drawOutroFrame, analyzeScenes, fmtTime, W, H, OUT_W, OUT_H } from '@/lib/canvas';
 import { createClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
@@ -44,6 +44,40 @@ function pickCopies(n: number, locale: string): string[] {
   return result;
 }
 
+// 各クリップから3フレーム（先頭・中間・終盤）をJPEG base64で抽出してAIに渡す
+async function captureClipFrames(
+  videoURL: string,
+  scenes: { startTime: number; clipDuration: number }[],
+): Promise<string[][]> {
+  const vid = document.createElement('video');
+  vid.src = videoURL; vid.muted = true; vid.preload = 'auto';
+  await new Promise<void>((resolve, reject) => {
+    vid.addEventListener('loadeddata', () => resolve(), { once: true });
+    vid.addEventListener('error', () => reject(new Error('video load failed')), { once: true });
+    vid.load();
+  });
+  const FW = 480;
+  const fh = Math.round(FW * (vid.videoHeight / vid.videoWidth)) || 270;
+  const c = document.createElement('canvas'); c.width = FW; c.height = fh;
+  const ctx = c.getContext('2d')!;
+  const seek = (t: number) => new Promise<void>(r => {
+    const guard = setTimeout(r, 1000);
+    vid.addEventListener('seeked', () => { clearTimeout(guard); r(); }, { once: true });
+    vid.currentTime = t;
+  });
+  const result: string[][] = [];
+  for (const s of scenes) {
+    const frames: string[] = [];
+    for (const frac of [0.1, 0.5, 0.85]) {
+      await seek(s.startTime + s.clipDuration * frac);
+      ctx.drawImage(vid, 0, 0, FW, fh);
+      frames.push(c.toDataURL('image/jpeg', 0.7).split(',')[1]);
+    }
+    result.push(frames);
+  }
+  return result;
+}
+
 const COLORS = {
   text: ['#ffffff','#FFD700','#FF4500','#00CFFF','#39FF14','#FF69B4'],
   border: ['#FFD700','#ffffff','#4a9eff','#FF4500','#39FF14'],
@@ -53,8 +87,9 @@ const COLORS = {
 
 const defaultState: AppState = {
   videoFile: null, videoURL: null, count: 3,
-  fontFamily: 'gothic', fontEffect: 'gothic', fontSize: 54,
-  textColor: '#ffffff', borderStyle: 'none', borderColor: '#FFD700',
+  fontFamily: 'gothic', customFontName: '', fontEffect: 'gothic', fontSize: 54,
+  textColor: '#ffffff', textOutline: false, outlineColor: '#000000',
+  borderStyle: 'none', borderColor: '#FFD700',
   pattern: 'random', ctaText: '続きは本編で', ctaColor: '#FFD700', hookEnabled: true, copies: [],
 };
 const defaultOutro: OutroState = {
@@ -244,8 +279,7 @@ export function ShortAIApp() {
 
     setLoading(true); setProgress(0);
     const n = state.count;
-    const copies = pickCopies(n, locale);
-    setState(s => ({ ...s, copies }));
+    let copies = pickCopies(n, locale);
 
     let scenes: { startTime: number; clipDuration: number; score: number }[] | null = null;
     if (state.videoURL) {
@@ -253,10 +287,30 @@ export function ShortAIApp() {
       try {
         scenes = await analyzeScenes(state.videoURL, n, p => setProgress(Math.round(p * 100)));
       } catch { /* fallback */ }
+
+      // AIが映像を見てキャッチコピーを生成（失敗時はランダムプールにフォールバック）
+      if (scenes) {
+        try {
+          setLoadingText(t('step3.aiTitles')); setLoadingSub(t('step3.aiTitlesSub'));
+          const frames = await captureClipFrames(state.videoURL, scenes);
+          const res = await fetch('/api/ai/titles', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ clips: frames.map(f => ({ frames: f })), locale }),
+          });
+          if (res.ok) {
+            const data = await res.json() as { titles: string[] };
+            if (data.titles?.length) {
+              copies = copies.map((c, i) => data.titles[i] || c);
+            }
+          }
+        } catch { /* fallback to random pool */ }
+      }
     } else {
       setLoadingText(t('step3.generating')); setLoadingSub('');
       await new Promise(r => setTimeout(r, 600));
     }
+    setState(s => ({ ...s, copies }));
 
     await renderPreviews(scenes, copies);
 
@@ -635,7 +689,11 @@ export function ShortAIApp() {
             {/* Count */}
             <div className="setting-group">
               <label className="setting-label">{t('step2.count')}</label>
-              <ToggleGroup options={[{value:'3',label:'3'},{value:'5',label:'5'},{value:'10',label:'10'}]} value={String(state.count)} onChange={v => setState(s => ({...s, count: parseInt(v)}))} />
+              <div className="count-row">
+                <ToggleGroup options={['1','3','5','10','20'].map(v => ({value: v, label: v}))} value={String(state.count)} onChange={v => setState(s => ({...s, count: parseInt(v)}))} />
+                <input type="number" className="count-input" min={1} max={50} value={state.count}
+                  onChange={e => { const n = Math.max(1, Math.min(50, parseInt(e.target.value) || 1)); setState(s => ({...s, count: n})); }} />
+              </div>
             </div>
 
             {/* Font family */}
@@ -650,6 +708,16 @@ export function ShortAIApp() {
                   </button>
                 ))}
               </div>
+              {state.fontFamily === 'custom' && (
+                <input className="setting-text-input" style={{ marginTop: 8 }}
+                  placeholder={t('step2.customFontPlaceholder')}
+                  value={state.customFontName}
+                  onChange={e => {
+                    const name = e.target.value;
+                    setState(s => ({...s, customFontName: name}));
+                    if (name.trim()) loadCustomGoogleFont(name);
+                  }} />
+              )}
             </div>
 
             {/* Font effect */}
@@ -675,6 +743,20 @@ export function ShortAIApp() {
             <div className="setting-group">
               <label className="setting-label">{t('step2.textColor')}</label>
               <ColorPicker colors={COLORS.text} value={state.textColor} customId="custom-text-color" onChange={c => setState(s => ({...s, textColor: c}))} />
+            </div>
+
+            {/* Text outline */}
+            <div className="setting-group">
+              <label className="setting-label-row">
+                <input type="checkbox" checked={state.textOutline}
+                  onChange={e => setState(s => ({...s, textOutline: e.target.checked}))} />
+                <span>{t('step2.textOutline')}</span>
+              </label>
+              {state.textOutline && (
+                <div style={{ marginTop: 8 }}>
+                  <ColorPicker colors={['#000000','#ffffff','#FFD700','#FF4500','#7c3aed']} value={state.outlineColor} customId="custom-outline-color" onChange={c => setState(s => ({...s, outlineColor: c}))} />
+                </div>
+              )}
             </div>
 
             {/* Border style */}

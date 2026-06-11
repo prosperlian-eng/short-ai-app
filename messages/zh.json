@@ -48,7 +48,9 @@
       "energy": "活力",
       "luxury": "奢华",
       "street": "街头"
-    }
+    },
+    "customFontPlaceholder": "输入 Google Fonts 名称（例：Kosugi Maru）",
+    "textOutline": "✏️ 文字描边"
   },
   "outro": {
     "badge": "结尾",
@@ -74,7 +76,9 @@
     "button": "生成 AI 短视频",
     "analyzing": "AI 正在分析视频...",
     "analyzingSub": "正在检测精彩片段",
-    "generating": "正在生成缩略图..."
+    "generating": "正在生成缩略图...",
+    "aiTitles": "AI 正在撰写标题...",
+    "aiTitlesSub": "根据实际画面内容生成"
   },
   "results": {
     "title": "已生成的短视频",

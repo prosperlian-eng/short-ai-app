@@ -246,7 +246,15 @@ function drawText(
   text: string,
   x: number, y: number,
   size: number,
+  outline?: { color: string },
 ) {
+  // 文字自体の縁取り（エフェクトとは独立して適用可能）
+  if (outline) {
+    ctx.strokeStyle = outline.color;
+    ctx.lineWidth = size * 0.1;
+    ctx.lineJoin = 'round';
+    ctx.strokeText(text, x, y);
+  }
   ctx.fillStyle = color;
   switch (effect) {
     case 'stroke':
@@ -336,6 +344,8 @@ export function drawFrame(
   const ctaText     = options.ctaText     ?? state.ctaText;
   const ctaColor    = options.ctaColor    ?? state.ctaColor;
   const patIdx      = options.patIdx      ?? 0;
+  const customFontName = state.customFontName;
+  const outline = state.textOutline ? { color: state.outlineColor } : undefined;
 
   ctx.save();
   ctx.scale(SCALE, SCALE);
@@ -375,14 +385,14 @@ export function drawFrame(
   let fSize = fontSize ?? (rawLines.length > 1 ? 54 : 60);
   const MIN_SIZE = 28;
   outer: while (fSize >= MIN_SIZE) {
-    ctx.font = buildFont(fontFamily, fSize);
+    ctx.font = buildFont(fontFamily, fSize, customFontName);
     for (const line of rawLines) {
       if (ctx.measureText(line).width > MAX_TEXT_W) { fSize -= 2; continue outer; }
     }
     break;
   }
   const finalLines: string[] = [];
-  ctx.font = buildFont(fontFamily, fSize);
+  ctx.font = buildFont(fontFamily, fSize, customFontName);
   for (const line of rawLines) {
     if (ctx.measureText(line).width <= MAX_TEXT_W) { finalLines.push(line); continue; }
     const mid = Math.ceil(line.length / 2);
@@ -393,8 +403,8 @@ export function drawFrame(
   const totalTextH = finalLines.length * lineH;
   const titleStartY = Math.max(fSize + 10, (TOP_H - totalTextH) / 2 + fSize);
   finalLines.forEach((line, i) => {
-    ctx.font = buildFont(fontFamily, fSize);
-    drawText(ctx, fontEffect, textColor, line, W/2, titleStartY + i * lineH, fSize);
+    ctx.font = buildFont(fontFamily, fSize, customFontName);
+    drawText(ctx, fontEffect, textColor, line, W/2, titleStartY + i * lineH, fSize, outline);
   });
 
   // CTA

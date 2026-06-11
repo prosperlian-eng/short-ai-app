@@ -48,7 +48,9 @@
       "energy": "에너지",
       "luxury": "럭셔리",
       "street": "스트리트"
-    }
+    },
+    "customFontPlaceholder": "Google Fonts 이름 입력 (예: Kosugi Maru)",
+    "textOutline": "✏️ 글자 테두리"
   },
   "outro": {
     "badge": "엔딩",
@@ -74,7 +76,9 @@
     "button": "AI 쇼츠 생성하기",
     "analyzing": "AI가 영상을 분석 중...",
     "analyzingSub": "하이라이트 장면을 감지하고 있습니다",
-    "generating": "썸네일 생성 중..."
+    "generating": "썸네일 생성 중...",
+    "aiTitles": "AI가 카피를 작성 중...",
+    "aiTitlesSub": "실제 영상 내용에 맞춰 생성합니다"
   },
   "results": {
     "title": "생성된 쇼츠 영상",

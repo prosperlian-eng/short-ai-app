@@ -48,7 +48,9 @@
       "energy": "Năng lượng",
       "luxury": "Sang trọng",
       "street": "Đường phố"
-    }
+    },
+    "customFontPlaceholder": "Tên Google Fonts (VD: Kosugi Maru)",
+    "textOutline": "✏️ Viền chữ"
   },
   "outro": {
     "badge": "KẾT THÚC",
@@ -74,7 +76,9 @@
     "button": "Tạo Shorts bằng AI",
     "analyzing": "AI đang phân tích video của bạn...",
     "analyzingSub": "Đang phát hiện các cảnh nổi bật",
-    "generating": "Đang tạo hình thu nhỏ..."
+    "generating": "Đang tạo hình thu nhỏ...",
+    "aiTitles": "AI đang viết tiêu đề...",
+    "aiTitlesSub": "Tạo dựa trên nội dung video thực tế"
   },
   "results": {
     "title": "Video ngắn đã tạo",

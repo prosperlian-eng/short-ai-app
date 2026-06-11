@@ -48,7 +48,9 @@
       "energy": "Energy",
       "luxury": "Luxury",
       "street": "Street"
-    }
+    },
+    "customFontPlaceholder": "Google Fonts name (e.g. Kosugi Maru)",
+    "textOutline": "✏️ Text Outline"
   },
   "outro": {
     "badge": "OUTRO",
@@ -74,7 +76,9 @@
     "button": "Generate AI Shorts",
     "analyzing": "AI is analyzing your video...",
     "analyzingSub": "Detecting highlight scenes",
-    "generating": "Generating thumbnails..."
+    "generating": "Generating thumbnails...",
+    "aiTitles": "AI is writing your hooks...",
+    "aiTitlesSub": "Matching titles to the actual footage"
   },
   "results": {
     "title": "Generated Short Clips",

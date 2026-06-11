@@ -48,7 +48,9 @@
       "energy": "Energia",
       "luxury": "Luxo",
       "street": "Urbano"
-    }
+    },
+    "customFontPlaceholder": "Nome do Google Fonts (ex: Kosugi Maru)",
+    "textOutline": "✏️ Contorno do texto"
   },
   "outro": {
     "badge": "FINAL",
@@ -74,7 +76,9 @@
     "button": "Gerar Shorts com IA",
     "analyzing": "A IA está analisando seu vídeo...",
     "analyzingSub": "Detectando cenas em destaque",
-    "generating": "Gerando miniaturas..."
+    "generating": "Gerando miniaturas...",
+    "aiTitles": "A IA está criando seus títulos...",
+    "aiTitlesSub": "Gerando com base no conteúdo real do vídeo"
   },
   "results": {
     "title": "Clipes gerados",

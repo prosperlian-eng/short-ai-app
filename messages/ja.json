@@ -48,7 +48,9 @@
       "energy": "エネルギー",
       "luxury": "ラグジュアリー",
       "street": "ストリート"
-    }
+    },
+    "customFontPlaceholder": "Google Fonts名を入力（例：Kosugi Maru）",
+    "textOutline": "✏️ 文字の縁取り"
   },
   "outro": {
     "badge": "OUTRO",
@@ -74,7 +76,9 @@
     "button": "AIショートを生成する",
     "analyzing": "AIが動画を解析中...",
     "analyzingSub": "盛り上がりシーンを検出しています",
-    "generating": "サムネイル生成中..."
+    "generating": "サムネイル生成中...",
+    "aiTitles": "AIがキャッチコピーを考案中...",
+    "aiTitlesSub": "映像の見どころに合わせて生成しています"
   },
   "results": {
     "title": "生成されたショート動画",

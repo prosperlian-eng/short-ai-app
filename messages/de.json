@@ -48,7 +48,9 @@
       "energy": "Energie",
       "luxury": "Luxus",
       "street": "Street"
-    }
+    },
+    "customFontPlaceholder": "Google-Fonts-Name (z. B. Kosugi Maru)",
+    "textOutline": "✏️ Textumriss"
   },
   "outro": {
     "badge": "OUTRO",
@@ -74,7 +76,9 @@
     "button": "KI-Shorts erstellen",
     "analyzing": "KI analysiert dein Video...",
     "analyzingSub": "Highlight-Szenen werden erkannt",
-    "generating": "Vorschaubilder werden erstellt..."
+    "generating": "Vorschaubilder werden erstellt...",
+    "aiTitles": "KI verfasst deine Hooks...",
+    "aiTitlesSub": "Passend zum tatsächlichen Videoinhalt"
   },
   "results": {
     "title": "Erstellte Shorts",

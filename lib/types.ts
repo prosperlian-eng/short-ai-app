@@ -1,6 +1,8 @@
 export type FontFamily =
   | 'gothic' | 'mincho' | 'dela' | 'reggae' | 'rampart' | 'rock3d'
-  | 'mplus' | 'rounded' | 'dot' | 'yomogi' | 'zen' | 'zenold' | 'impact';
+  | 'mplus' | 'rounded' | 'dot' | 'yomogi' | 'zen' | 'zenold' | 'impact'
+  | 'kaisei' | 'mochiy' | 'rocknroll' | 'trainone' | 'stick' | 'hachimaru'
+  | 'shippori' | 'anton' | 'bebas' | 'custom';
 
 export type FontEffect = 'gothic' | 'glow' | 'stroke' | 'box' | 'simple';
 export type BorderStyle = 'none' | 'thin' | 'thick' | 'glow' | 'corner';
@@ -12,9 +14,12 @@ export interface AppState {
   videoURL: string | null;
   count: number;
   fontFamily: FontFamily;
+  customFontName: string;
   fontEffect: FontEffect;
   fontSize: number;
   textColor: string;
+  textOutline: boolean;
+  outlineColor: string;
   borderStyle: BorderStyle;
   borderColor: string;
   pattern: PatternMode;

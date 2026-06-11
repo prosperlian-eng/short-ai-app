@@ -48,7 +48,9 @@
       "energy": "Energi",
       "luxury": "Mewah",
       "street": "Street"
-    }
+    },
+    "customFontPlaceholder": "Nama Google Fonts (cth: Kosugi Maru)",
+    "textOutline": "✏️ Garis Tepi Teks"
   },
   "outro": {
     "badge": "OUTRO",
@@ -74,7 +76,9 @@
     "button": "Buat Shorts AI",
     "analyzing": "AI sedang menganalisis videomu...",
     "analyzingSub": "Mendeteksi adegan-adegan menarik",
-    "generating": "Membuat thumbnail..."
+    "generating": "Membuat thumbnail...",
+    "aiTitles": "AI sedang menulis judul...",
+    "aiTitlesSub": "Dibuat sesuai isi video sebenarnya"
   },
   "results": {
     "title": "Klip Pendek yang Dihasilkan",
