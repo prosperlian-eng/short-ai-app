@@ -1,0 +1,98 @@
+{
+  "hero": {
+    "badge": "DEMO",
+    "title": "ShortAI",
+    "subtitle": "Video hochladen – virale\nShorts automatisch erstellen"
+  },
+  "step1": {
+    "badge": "SCHRITT 1",
+    "title": "Video hochladen",
+    "hint": "mp4 / mov hier ablegen\noder zum Auswählen tippen"
+  },
+  "step2": {
+    "badge": "SCHRITT 2",
+    "title": "Einstellungen",
+    "count": "Anzahl Clips",
+    "font": "Schriftart",
+    "fontEffect": "Texteffekt",
+    "fontSize": "Schriftgröße",
+    "textColor": "Textfarbe",
+    "borderStyle": "Rahmen",
+    "borderColor": "Rahmenfarbe",
+    "pattern": "Hintergrund",
+    "ctaText": "CTA-Text",
+    "ctaColor": "CTA-Farbe",
+    "preset": "Voreinstellung",
+    "savePreset": "💾 Speichern",
+    "loadPreset": "📂 Laden",
+    "effects": {
+      "shadow": "Schatten (Standard)",
+      "glow": "Leuchten",
+      "stroke": "Umriss",
+      "box": "Box",
+      "simple": "Einfach"
+    },
+    "borders": {
+      "none": "Kein",
+      "thin": "Dünn",
+      "thick": "Dick",
+      "glow": "Leuchtend",
+      "corner": "Eckdekor"
+    },
+    "patterns": {
+      "random": "Zufällig",
+      "dramatic": "Dramatisch",
+      "clean": "Clean",
+      "energy": "Energie",
+      "luxury": "Luxus",
+      "street": "Street"
+    }
+  },
+  "outro": {
+    "badge": "OUTRO",
+    "title": "Abspann-Einstellungen",
+    "titleSub": "(letzte 5 Sek.)",
+    "modeText": "✏️ Text",
+    "modeVideo": "🎬 Video hochladen",
+    "modeNone": "✕ Kein",
+    "channel": "Kanalname",
+    "channelPlaceholder": "z. B. Mein Kanal",
+    "sub": "Untertext",
+    "subPlaceholder": "z. B. Abonniere für mehr!",
+    "sns": "Social-Media-Link (optional)",
+    "snsPlaceholder": "z. B. @meinkanal",
+    "bgColor": "Hintergrundfarbe",
+    "preview": "Vorschau",
+    "uploadHint": "Abspann-Video hier ablegen\noder zum Auswählen tippen",
+    "note": "※ Die ersten 5 Sekunden werden verwendet. Empfohlen: Hochformat 9:16"
+  },
+  "step3": {
+    "badge": "SCHRITT 3",
+    "title": "KI-Shorts erstellen",
+    "button": "KI-Shorts erstellen",
+    "analyzing": "KI analysiert dein Video...",
+    "analyzingSub": "Highlight-Szenen werden erkannt",
+    "generating": "Vorschaubilder werden erstellt..."
+  },
+  "results": {
+    "title": "Erstellte Shorts",
+    "regenTitles": "🎲 Titel neu generieren",
+    "dlAll": "⬇ Alle herunterladen",
+    "grid": "Raster",
+    "list": "Liste",
+    "selectAll": "☑ Alle auswählen",
+    "deselectAll": "☐ Auswahl aufheben",
+    "dlSelected": "⬇ Auswahl herunterladen",
+    "dlVideo": "⬇ Video herunterladen",
+    "recording": "⏺ Aufnahme läuft"
+  },
+  "footer": "ShortAI DEMO — Kein Backend · Läuft komplett im Browser",
+  "toast": {
+    "uploadFirst": "Bitte zuerst ein Video hochladen",
+    "regenDone": "Titel neu generiert",
+    "presetSaved": "„{name}“ gespeichert",
+    "presetApplied": "„{name}“ angewendet",
+    "downloaded": "{name} heruntergeladen",
+    "recordFailed": "Aufnahme fehlgeschlagen"
+  }
+}

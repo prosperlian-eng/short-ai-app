@@ -1,0 +1,98 @@
+{
+  "hero": {
+    "badge": "DEMO",
+    "title": "ShortAI",
+    "subtitle": "Sube tu video y genera\nclips virales automáticamente"
+  },
+  "step1": {
+    "badge": "PASO 1",
+    "title": "Subir video",
+    "hint": "Arrastra mp4 / mov aquí\no toca para seleccionar"
+  },
+  "step2": {
+    "badge": "PASO 2",
+    "title": "Configuración",
+    "count": "Clips",
+    "font": "Fuente",
+    "fontEffect": "Efecto de texto",
+    "fontSize": "Tamaño de fuente",
+    "textColor": "Color de texto",
+    "borderStyle": "Borde",
+    "borderColor": "Color de borde",
+    "pattern": "Fondo",
+    "ctaText": "Texto CTA",
+    "ctaColor": "Color CTA",
+    "preset": "Preajuste",
+    "savePreset": "💾 Guardar",
+    "loadPreset": "📂 Cargar",
+    "effects": {
+      "shadow": "Sombra (predeterminado)",
+      "glow": "Brillo",
+      "stroke": "Contorno",
+      "box": "Caja",
+      "simple": "Simple"
+    },
+    "borders": {
+      "none": "Ninguno",
+      "thin": "Fino",
+      "thick": "Grueso",
+      "glow": "Brillo",
+      "corner": "Esquina"
+    },
+    "patterns": {
+      "random": "Aleatorio",
+      "dramatic": "Dramático",
+      "clean": "Limpio",
+      "energy": "Energía",
+      "luxury": "Lujo",
+      "street": "Urbano"
+    }
+  },
+  "outro": {
+    "badge": "FINAL",
+    "title": "Pantalla final",
+    "titleSub": "(últimos 5 seg)",
+    "modeText": "✏️ Texto",
+    "modeVideo": "🎬 Subir video",
+    "modeNone": "✕ Ninguno",
+    "channel": "Nombre del canal",
+    "channelPlaceholder": "ej. Mi Canal",
+    "sub": "Subtítulo",
+    "subPlaceholder": "ej. ¡Suscríbete para más!",
+    "sns": "Enlace de redes (opcional)",
+    "snsPlaceholder": "ej. @micanal",
+    "bgColor": "Color de fondo",
+    "preview": "Vista previa",
+    "uploadHint": "Arrastra el video final aquí\no toca para seleccionar",
+    "note": "※ Se usarán los primeros 5 segundos. Recomendado: vertical 9:16"
+  },
+  "step3": {
+    "badge": "PASO 3",
+    "title": "Generar Shorts con IA",
+    "button": "Generar Shorts con IA",
+    "analyzing": "La IA está analizando tu video...",
+    "analyzingSub": "Detectando momentos destacados",
+    "generating": "Generando miniaturas..."
+  },
+  "results": {
+    "title": "Clips generados",
+    "regenTitles": "🎲 Regenerar títulos",
+    "dlAll": "⬇ Descargar todo",
+    "grid": "Cuadrícula",
+    "list": "Lista",
+    "selectAll": "☑ Seleccionar todo",
+    "deselectAll": "☐ Deseleccionar todo",
+    "dlSelected": "⬇ Descargar selección",
+    "dlVideo": "⬇ Descargar video",
+    "recording": "⏺ Grabando"
+  },
+  "footer": "ShortAI DEMO — Sin backend · Funciona solo en el navegador",
+  "toast": {
+    "uploadFirst": "Sube primero un video",
+    "regenDone": "Títulos regenerados",
+    "presetSaved": "Guardado \"{name}\"",
+    "presetApplied": "Aplicado \"{name}\"",
+    "downloaded": "{name} descargado",
+    "recordFailed": "Error al grabar"
+  }
+}

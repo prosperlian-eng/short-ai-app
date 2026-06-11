@@ -34,10 +34,10 @@ const EN_CATCHCOPIES = [
 const SCENE_LABELS = ['🔥 盛り上がりシーン','⚡ アクション','🎯 決定的瞬間','✨ ハイライト','💡 重要ポイント'];
 
 function pickCopies(n: number, locale: string): string[] {
-  const pool = [...(locale === 'en' ? EN_CATCHCOPIES : CATCHCOPIES)];
+  const pool = [...(locale !== 'ja' ? EN_CATCHCOPIES : CATCHCOPIES)];
   const result: string[] = [];
   for (let i = 0; i < n; i++) {
-    if (!pool.length) pool.push(...(locale === 'en' ? EN_CATCHCOPIES : CATCHCOPIES));
+    if (!pool.length) pool.push(...(locale !== 'ja' ? EN_CATCHCOPIES : CATCHCOPIES));
     const idx = Math.floor(Math.random() * pool.length);
     result.push(pool.splice(idx, 1)[0]);
   }
@@ -128,10 +128,10 @@ export function ShortAIApp() {
 
   // ── locale switch ──
   const switchLocale = (l: string) => {
-    const newPath = pathname.replace(/^\/(ja|en)/, `/${l}`);
+    const newPath = pathname.replace(/^\/(ja|en|zh|ko|es|fr|de|pt|vi|id)/, `/${l}`);
     router.push(newPath);
     // update CTA text default per locale
-    setState(s => ({ ...s, ctaText: l === 'en' ? 'Watch the full video' : '続きは本編で' }));
+    setState(s => ({ ...s, ctaText: l === 'ja' ? '続きは本編で' : 'Watch the full video' }));
   };
 
   // ── toast ──
@@ -345,7 +345,7 @@ export function ShortAIApp() {
       const titleWrap = document.createElement('div'); titleWrap.className = 'card-title-edit-wrap';
       const titleInput = document.createElement('textarea'); titleInput.className = 'card-title-input';
       titleInput.value = title; titleInput.rows = 2; titleInput.maxLength = 60;
-      titleInput.placeholder = locale === 'en' ? 'Edit title...' : 'テキストを編集...';
+      titleInput.placeholder = locale !== 'ja' ? 'Edit title...' : 'テキストを編集...';
       let redrawTimer: ReturnType<typeof setTimeout> | null = null;
       titleInput.addEventListener('input', () => {
         const nt = titleInput.value;
@@ -361,9 +361,9 @@ export function ShortAIApp() {
       dlBtn.innerHTML = t('results.dlVideo');
       dlBtn.addEventListener('click', () => downloadShort(i, dlBtn));
       const regenBtn = document.createElement('button'); regenBtn.className = 'short-regen-btn'; regenBtn.textContent = '🎲';
-      regenBtn.title = locale === 'en' ? 'Random title' : 'ランダムタイトル';
+      regenBtn.title = locale !== 'ja' ? 'Random title' : 'ランダムタイトル';
       regenBtn.addEventListener('click', async () => {
-        const pool = locale === 'en' ? EN_CATCHCOPIES : CATCHCOPIES;
+        const pool = locale !== 'ja' ? EN_CATCHCOPIES : CATCHCOPIES;
         const nt = pool[Math.floor(Math.random() * pool.length)];
         cardDataRef.current[i].title = nt;
         titleInput.value = nt;
@@ -543,8 +543,23 @@ export function ShortAIApp() {
       {/* Hero */}
       <header className="hero">
         <div className="locale-switcher" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <button className={`locale-btn${locale === 'ja' ? ' active' : ''}`} onClick={() => switchLocale('ja')}>🇯🇵 日本語</button>
-          <button className={`locale-btn${locale === 'en' ? ' active' : ''}`} onClick={() => switchLocale('en')}>🇺🇸 EN</button>
+          <select
+            className="locale-select"
+            value={locale}
+            onChange={e => switchLocale(e.target.value)}
+            aria-label="Language"
+          >
+            <option value="ja">🇯🇵 日本語</option>
+            <option value="en">🇺🇸 English</option>
+            <option value="zh">🇨🇳 中文</option>
+            <option value="ko">🇰🇷 한국어</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="pt">🇵🇹 Português</option>
+            <option value="vi">🇻🇳 Tiếng Việt</option>
+            <option value="id">🇮🇩 Bahasa Indonesia</option>
+          </select>
           {user ? (
             <UserMenu
               email={user.email ?? ''}
@@ -668,7 +683,7 @@ export function ShortAIApp() {
             <div className="setting-group">
               <label className="setting-label">{t('step2.ctaText')}</label>
               <input className="setting-text-input" value={state.ctaText} maxLength={20}
-                onChange={e => setState(s => ({...s, ctaText: e.target.value || (locale === 'en' ? 'Watch the full video' : '続きは本編で')}))} />
+                onChange={e => setState(s => ({...s, ctaText: e.target.value || (locale !== 'ja' ? 'Watch the full video' : '続きは本編で')}))} />
             </div>
 
             {/* CTA color */}

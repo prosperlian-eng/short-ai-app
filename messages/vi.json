@@ -1,0 +1,98 @@
+{
+  "hero": {
+    "badge": "DEMO",
+    "title": "ShortAI",
+    "subtitle": "Chỉ cần tải video lên\nlà tự động tạo video ngắn viral"
+  },
+  "step1": {
+    "badge": "BƯỚC 1",
+    "title": "Tải video lên",
+    "hint": "Kéo thả file mp4 / mov vào đây\nhoặc chạm để chọn"
+  },
+  "step2": {
+    "badge": "BƯỚC 2",
+    "title": "Cài đặt",
+    "count": "Số lượng tạo",
+    "font": "Phông chữ",
+    "fontEffect": "Hiệu ứng văn bản",
+    "fontSize": "Cỡ chữ",
+    "textColor": "Màu chữ",
+    "borderStyle": "Kiểu viền",
+    "borderColor": "Màu viền",
+    "pattern": "Nền",
+    "ctaText": "Văn bản CTA",
+    "ctaColor": "Màu CTA",
+    "preset": "Mẫu cài sẵn",
+    "savePreset": "💾 Lưu",
+    "loadPreset": "📂 Tải",
+    "effects": {
+      "shadow": "Bóng đổ (mặc định)",
+      "glow": "Phát sáng",
+      "stroke": "Viền chữ",
+      "box": "Hộp",
+      "simple": "Đơn giản"
+    },
+    "borders": {
+      "none": "Không",
+      "thin": "Mỏng",
+      "thick": "Dày",
+      "glow": "Viền phát sáng",
+      "corner": "Góc trang trí"
+    },
+    "patterns": {
+      "random": "Ngẫu nhiên",
+      "dramatic": "Kịch tính",
+      "clean": "Tối giản",
+      "energy": "Năng lượng",
+      "luxury": "Sang trọng",
+      "street": "Đường phố"
+    }
+  },
+  "outro": {
+    "badge": "KẾT THÚC",
+    "title": "Cài đặt màn hình kết thúc",
+    "titleSub": "(5 giây cuối)",
+    "modeText": "✏️ Văn bản",
+    "modeVideo": "🎬 Tải video lên",
+    "modeNone": "✕ Không có",
+    "channel": "Tên kênh",
+    "channelPlaceholder": "VD: Kênh của tôi",
+    "sub": "Phụ đề",
+    "subPlaceholder": "VD: Hãy đăng ký kênh nhé!",
+    "sns": "Liên kết MXH (tùy chọn)",
+    "snsPlaceholder": "VD: @kenhtoi",
+    "bgColor": "Màu nền",
+    "preview": "Xem trước",
+    "uploadHint": "Kéo thả video kết thúc vào đây\nhoặc chạm để chọn",
+    "note": "※ 5 giây đầu sẽ được sử dụng. Khuyến nghị: dọc 9:16"
+  },
+  "step3": {
+    "badge": "BƯỚC 3",
+    "title": "Tạo Shorts bằng AI",
+    "button": "Tạo Shorts bằng AI",
+    "analyzing": "AI đang phân tích video của bạn...",
+    "analyzingSub": "Đang phát hiện các cảnh nổi bật",
+    "generating": "Đang tạo hình thu nhỏ..."
+  },
+  "results": {
+    "title": "Video ngắn đã tạo",
+    "regenTitles": "🎲 Tạo lại tiêu đề",
+    "dlAll": "⬇ Tải tất cả",
+    "grid": "Lưới",
+    "list": "Danh sách",
+    "selectAll": "☑ Chọn tất cả",
+    "deselectAll": "☐ Bỏ chọn tất cả",
+    "dlSelected": "⬇ Tải mục đã chọn",
+    "dlVideo": "⬇ Tải video",
+    "recording": "⏺ Đang quay"
+  },
+  "footer": "ShortAI DEMO — Không cần backend · Chạy hoàn toàn trên trình duyệt",
+  "toast": {
+    "uploadFirst": "Vui lòng tải video lên trước",
+    "regenDone": "Đã tạo lại tiêu đề",
+    "presetSaved": "Đã lưu \"{name}\"",
+    "presetApplied": "Đã áp dụng \"{name}\"",
+    "downloaded": "Đã tải {name}",
+    "recordFailed": "Quay không thành công"
+  }
+}

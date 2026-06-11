@@ -1,0 +1,98 @@
+{
+  "hero": {
+    "badge": "DEMO",
+    "title": "ShortAI",
+    "subtitle": "Unggah videomu, dan buat\nklip pendek viral secara otomatis"
+  },
+  "step1": {
+    "badge": "LANGKAH 1",
+    "title": "Unggah Video",
+    "hint": "Seret file mp4 / mov ke sini\natau ketuk untuk memilih"
+  },
+  "step2": {
+    "badge": "LANGKAH 2",
+    "title": "Pengaturan",
+    "count": "Jumlah klip",
+    "font": "Font",
+    "fontEffect": "Efek Teks",
+    "fontSize": "Ukuran Font",
+    "textColor": "Warna Teks",
+    "borderStyle": "Gaya Bingkai",
+    "borderColor": "Warna Bingkai",
+    "pattern": "Latar Belakang",
+    "ctaText": "Teks CTA",
+    "ctaColor": "Warna CTA",
+    "preset": "Preset",
+    "savePreset": "💾 Simpan",
+    "loadPreset": "📂 Muat",
+    "effects": {
+      "shadow": "Bayangan (default)",
+      "glow": "Glow",
+      "stroke": "Garis Tepi",
+      "box": "Kotak",
+      "simple": "Sederhana"
+    },
+    "borders": {
+      "none": "Tidak ada",
+      "thin": "Tipis",
+      "thick": "Tebal",
+      "glow": "Glow",
+      "corner": "Sudut"
+    },
+    "patterns": {
+      "random": "Acak",
+      "dramatic": "Dramatis",
+      "clean": "Bersih",
+      "energy": "Energi",
+      "luxury": "Mewah",
+      "street": "Street"
+    }
+  },
+  "outro": {
+    "badge": "OUTRO",
+    "title": "Pengaturan Layar Akhir",
+    "titleSub": "(5 detik terakhir)",
+    "modeText": "✏️ Teks",
+    "modeVideo": "🎬 Unggah Video",
+    "modeNone": "✕ Tidak ada",
+    "channel": "Nama Channel",
+    "channelPlaceholder": "cth: Channel Saya",
+    "sub": "Sub Teks",
+    "subPlaceholder": "cth: Jangan lupa subscribe!",
+    "sns": "Tautan Sosmed (opsional)",
+    "snsPlaceholder": "cth: @channelsaya",
+    "bgColor": "Warna Latar",
+    "preview": "Pratinjau",
+    "uploadHint": "Seret video penutup ke sini\natau ketuk untuk memilih",
+    "note": "※ 5 detik pertama akan digunakan. Disarankan: vertikal 9:16"
+  },
+  "step3": {
+    "badge": "LANGKAH 3",
+    "title": "Buat Shorts AI",
+    "button": "Buat Shorts AI",
+    "analyzing": "AI sedang menganalisis videomu...",
+    "analyzingSub": "Mendeteksi adegan-adegan menarik",
+    "generating": "Membuat thumbnail..."
+  },
+  "results": {
+    "title": "Klip Pendek yang Dihasilkan",
+    "regenTitles": "🎲 Buat Ulang Judul",
+    "dlAll": "⬇ Unduh Semua",
+    "grid": "Grid",
+    "list": "Daftar",
+    "selectAll": "☑ Pilih Semua",
+    "deselectAll": "☐ Batal Pilih Semua",
+    "dlSelected": "⬇ Unduh Pilihan",
+    "dlVideo": "⬇ Unduh Video",
+    "recording": "⏺ Merekam"
+  },
+  "footer": "ShortAI DEMO — Tanpa backend · Berjalan sepenuhnya di browser",
+  "toast": {
+    "uploadFirst": "Silakan unggah video terlebih dahulu",
+    "regenDone": "Judul berhasil dibuat ulang",
+    "presetSaved": "\"{name}\" disimpan",
+    "presetApplied": "\"{name}\" diterapkan",
+    "downloaded": "{name} berhasil diunduh",
+    "recordFailed": "Perekaman gagal"
+  }
+}

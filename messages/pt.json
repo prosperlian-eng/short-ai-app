@@ -1,0 +1,98 @@
+{
+  "hero": {
+    "badge": "DEMO",
+    "title": "ShortAI",
+    "subtitle": "Envie seu vídeo e gere\nclipes virais automaticamente"
+  },
+  "step1": {
+    "badge": "PASSO 1",
+    "title": "Enviar vídeo",
+    "hint": "Arraste mp4 / mov aqui\nou toque para selecionar"
+  },
+  "step2": {
+    "badge": "PASSO 2",
+    "title": "Configurações",
+    "count": "Quantidade de clipes",
+    "font": "Fonte",
+    "fontEffect": "Efeito de texto",
+    "fontSize": "Tamanho da fonte",
+    "textColor": "Cor do texto",
+    "borderStyle": "Borda",
+    "borderColor": "Cor da borda",
+    "pattern": "Plano de fundo",
+    "ctaText": "Texto CTA",
+    "ctaColor": "Cor CTA",
+    "preset": "Predefinição",
+    "savePreset": "💾 Salvar",
+    "loadPreset": "📂 Carregar",
+    "effects": {
+      "shadow": "Sombra (padrão)",
+      "glow": "Brilho",
+      "stroke": "Contorno",
+      "box": "Caixa",
+      "simple": "Simples"
+    },
+    "borders": {
+      "none": "Nenhuma",
+      "thin": "Fina",
+      "thick": "Grossa",
+      "glow": "Brilho",
+      "corner": "Canto"
+    },
+    "patterns": {
+      "random": "Aleatório",
+      "dramatic": "Dramático",
+      "clean": "Limpo",
+      "energy": "Energia",
+      "luxury": "Luxo",
+      "street": "Urbano"
+    }
+  },
+  "outro": {
+    "badge": "FINAL",
+    "title": "Tela final",
+    "titleSub": "(últimos 5 seg)",
+    "modeText": "✏️ Texto",
+    "modeVideo": "🎬 Enviar vídeo",
+    "modeNone": "✕ Nenhum",
+    "channel": "Nome do canal",
+    "channelPlaceholder": "ex: Meu Canal",
+    "sub": "Subtexto",
+    "subPlaceholder": "ex: Inscreva-se para mais!",
+    "sns": "Link de redes sociais (opcional)",
+    "snsPlaceholder": "ex: @meucanal",
+    "bgColor": "Cor de fundo",
+    "preview": "Pré-visualização",
+    "uploadHint": "Arraste o vídeo final aqui\nou toque para selecionar",
+    "note": "※ Os primeiros 5 segundos serão usados. Recomendado: vertical 9:16"
+  },
+  "step3": {
+    "badge": "PASSO 3",
+    "title": "Gerar Shorts com IA",
+    "button": "Gerar Shorts com IA",
+    "analyzing": "A IA está analisando seu vídeo...",
+    "analyzingSub": "Detectando cenas em destaque",
+    "generating": "Gerando miniaturas..."
+  },
+  "results": {
+    "title": "Clipes gerados",
+    "regenTitles": "🎲 Regenerar títulos",
+    "dlAll": "⬇ Baixar tudo",
+    "grid": "Grade",
+    "list": "Lista",
+    "selectAll": "☑ Selecionar tudo",
+    "deselectAll": "☐ Desmarcar tudo",
+    "dlSelected": "⬇ Baixar selecionados",
+    "dlVideo": "⬇ Baixar vídeo",
+    "recording": "⏺ Gravando"
+  },
+  "footer": "ShortAI DEMO — Sem backend · Roda totalmente no navegador",
+  "toast": {
+    "uploadFirst": "Envie um vídeo primeiro",
+    "regenDone": "Títulos regenerados",
+    "presetSaved": "\"{name}\" salvo",
+    "presetApplied": "\"{name}\" aplicado",
+    "downloaded": "{name} baixado",
+    "recordFailed": "Falha na gravação"
+  }
+}

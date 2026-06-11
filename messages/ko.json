@@ -1,0 +1,98 @@
+{
+  "hero": {
+    "badge": "데모",
+    "title": "ShortAI",
+    "subtitle": "영상을 업로드하기만 하면\n바이럴 쇼츠를 자동으로 생성"
+  },
+  "step1": {
+    "badge": "STEP 1",
+    "title": "영상 업로드",
+    "hint": "mp4 / mov 파일을 드롭\n또는 탭하여 선택"
+  },
+  "step2": {
+    "badge": "STEP 2",
+    "title": "생성 설정",
+    "count": "생성 개수",
+    "font": "폰트",
+    "fontEffect": "텍스트 효과",
+    "fontSize": "폰트 크기",
+    "textColor": "텍스트 색상",
+    "borderStyle": "테두리 스타일",
+    "borderColor": "테두리 색상",
+    "pattern": "배경 패턴",
+    "ctaText": "CTA 텍스트",
+    "ctaColor": "CTA 색상",
+    "preset": "프리셋",
+    "savePreset": "💾 저장",
+    "loadPreset": "📂 불러오기",
+    "effects": {
+      "shadow": "그림자(기본)",
+      "glow": "글로우",
+      "stroke": "외곽선",
+      "box": "박스",
+      "simple": "심플"
+    },
+    "borders": {
+      "none": "없음",
+      "thin": "얇게",
+      "thick": "굵게",
+      "glow": "글로우 테두리",
+      "corner": "코너 장식"
+    },
+    "patterns": {
+      "random": "랜덤",
+      "dramatic": "드라마틱",
+      "clean": "클린",
+      "energy": "에너지",
+      "luxury": "럭셔리",
+      "street": "스트리트"
+    }
+  },
+  "outro": {
+    "badge": "엔딩",
+    "title": "엔딩 화면 설정",
+    "titleSub": "(영상 마지막 5초)",
+    "modeText": "✏️ 텍스트",
+    "modeVideo": "🎬 영상 업로드",
+    "modeNone": "✕ 없음",
+    "channel": "채널명",
+    "channelPlaceholder": "예: My Channel",
+    "sub": "서브 텍스트",
+    "subPlaceholder": "예: 구독 부탁드립니다!",
+    "sns": "SNS 링크 (선택)",
+    "snsPlaceholder": "예: @mychannel",
+    "bgColor": "배경색",
+    "preview": "미리보기",
+    "uploadHint": "엔딩 영상을 드롭\n또는 탭하여 선택",
+    "note": "※ 처음 5초가 사용됩니다. 권장: 9:16 세로형"
+  },
+  "step3": {
+    "badge": "STEP 3",
+    "title": "AI 쇼츠 생성",
+    "button": "AI 쇼츠 생성하기",
+    "analyzing": "AI가 영상을 분석 중...",
+    "analyzingSub": "하이라이트 장면을 감지하고 있습니다",
+    "generating": "썸네일 생성 중..."
+  },
+  "results": {
+    "title": "생성된 쇼츠 영상",
+    "regenTitles": "🎲 제목 다시 생성",
+    "dlAll": "⬇ 전체 다운로드",
+    "grid": "그리드",
+    "list": "리스트",
+    "selectAll": "☑ 전체 선택",
+    "deselectAll": "☐ 전체 해제",
+    "dlSelected": "⬇ 선택 다운로드",
+    "dlVideo": "⬇ 영상 다운로드",
+    "recording": "⏺ 녹화 중"
+  },
+  "footer": "ShortAI DEMO — 백엔드 없음 · 브라우저에서만 동작",
+  "toast": {
+    "uploadFirst": "먼저 영상을 업로드해 주세요",
+    "regenDone": "제목을 다시 생성했습니다",
+    "presetSaved": "\"{name}\" 저장됨",
+    "presetApplied": "\"{name}\" 적용됨",
+    "downloaded": "{name} 다운로드 완료",
+    "recordFailed": "녹화에 실패했습니다"
+  }
+}

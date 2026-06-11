@@ -1,0 +1,98 @@
+{
+  "hero": {
+    "badge": "演示",
+    "title": "ShortAI",
+    "subtitle": "只需上传视频\n即可自动生成爆款短视频"
+  },
+  "step1": {
+    "badge": "步骤 1",
+    "title": "上传视频",
+    "hint": "拖放 mp4 / mov 文件\n或点击选择"
+  },
+  "step2": {
+    "badge": "步骤 2",
+    "title": "生成设置",
+    "count": "生成数量",
+    "font": "字体",
+    "fontEffect": "文字效果",
+    "fontSize": "字体大小",
+    "textColor": "文字颜色",
+    "borderStyle": "边框样式",
+    "borderColor": "边框颜色",
+    "pattern": "背景样式",
+    "ctaText": "CTA 文案",
+    "ctaColor": "CTA 颜色",
+    "preset": "预设",
+    "savePreset": "💾 保存",
+    "loadPreset": "📂 加载",
+    "effects": {
+      "shadow": "阴影（默认）",
+      "glow": "光晕",
+      "stroke": "描边",
+      "box": "方框",
+      "simple": "简约"
+    },
+    "borders": {
+      "none": "无",
+      "thin": "细线",
+      "thick": "粗线",
+      "glow": "光晕边框",
+      "corner": "角标"
+    },
+    "patterns": {
+      "random": "随机",
+      "dramatic": "戏剧性",
+      "clean": "简洁",
+      "energy": "活力",
+      "luxury": "奢华",
+      "street": "街头"
+    }
+  },
+  "outro": {
+    "badge": "结尾",
+    "title": "结尾画面设置",
+    "titleSub": "（视频末尾 5 秒）",
+    "modeText": "✏️ 文本",
+    "modeVideo": "🎬 上传视频",
+    "modeNone": "✕ 无",
+    "channel": "频道名称",
+    "channelPlaceholder": "例：My Channel",
+    "sub": "副标题",
+    "subPlaceholder": "例：欢迎订阅！",
+    "sns": "社交媒体链接（可选）",
+    "snsPlaceholder": "例：@mychannel",
+    "bgColor": "背景颜色",
+    "preview": "预览",
+    "uploadHint": "拖放结尾视频\n或点击选择",
+    "note": "※ 将使用前 5 秒。推荐：9:16 竖屏"
+  },
+  "step3": {
+    "badge": "步骤 3",
+    "title": "生成 AI 短视频",
+    "button": "生成 AI 短视频",
+    "analyzing": "AI 正在分析视频...",
+    "analyzingSub": "正在检测精彩片段",
+    "generating": "正在生成缩略图..."
+  },
+  "results": {
+    "title": "已生成的短视频",
+    "regenTitles": "🎲 重新生成标题",
+    "dlAll": "⬇ 全部下载",
+    "grid": "网格",
+    "list": "列表",
+    "selectAll": "☑ 全选",
+    "deselectAll": "☐ 取消全选",
+    "dlSelected": "⬇ 下载所选",
+    "dlVideo": "⬇ 下载视频",
+    "recording": "⏺ 录制中"
+  },
+  "footer": "ShortAI DEMO — 无需后端 · 完全在浏览器中运行",
+  "toast": {
+    "uploadFirst": "请先上传视频",
+    "regenDone": "标题已重新生成",
+    "presetSaved": "已保存「{name}」",
+    "presetApplied": "已应用「{name}」",
+    "downloaded": "已下载 {name}",
+    "recordFailed": "录制失败"
+  }
+}

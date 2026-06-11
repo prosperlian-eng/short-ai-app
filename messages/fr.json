@@ -1,0 +1,98 @@
+{
+  "hero": {
+    "badge": "DÉMO",
+    "title": "ShortAI",
+    "subtitle": "Importez votre vidéo et générez\nautomatiquement des clips viraux"
+  },
+  "step1": {
+    "badge": "ÉTAPE 1",
+    "title": "Importer la vidéo",
+    "hint": "Déposez un fichier mp4 / mov\nou touchez pour sélectionner"
+  },
+  "step2": {
+    "badge": "ÉTAPE 2",
+    "title": "Paramètres",
+    "count": "Nombre de clips",
+    "font": "Police",
+    "fontEffect": "Effet de texte",
+    "fontSize": "Taille de police",
+    "textColor": "Couleur du texte",
+    "borderStyle": "Bordure",
+    "borderColor": "Couleur de bordure",
+    "pattern": "Arrière-plan",
+    "ctaText": "Texte CTA",
+    "ctaColor": "Couleur CTA",
+    "preset": "Préréglage",
+    "savePreset": "💾 Enregistrer",
+    "loadPreset": "📂 Charger",
+    "effects": {
+      "shadow": "Ombre (par défaut)",
+      "glow": "Lueur",
+      "stroke": "Contour",
+      "box": "Boîte",
+      "simple": "Simple"
+    },
+    "borders": {
+      "none": "Aucune",
+      "thin": "Fine",
+      "thick": "Épaisse",
+      "glow": "Lueur",
+      "corner": "Coin"
+    },
+    "patterns": {
+      "random": "Aléatoire",
+      "dramatic": "Dramatique",
+      "clean": "Épuré",
+      "energy": "Énergie",
+      "luxury": "Luxe",
+      "street": "Urbain"
+    }
+  },
+  "outro": {
+    "badge": "FIN",
+    "title": "Écran de fin",
+    "titleSub": "(5 dernières secondes)",
+    "modeText": "✏️ Texte",
+    "modeVideo": "🎬 Importer une vidéo",
+    "modeNone": "✕ Aucun",
+    "channel": "Nom de la chaîne",
+    "channelPlaceholder": "ex. Ma Chaîne",
+    "sub": "Sous-texte",
+    "subPlaceholder": "ex. Abonnez-vous pour plus !",
+    "sns": "Lien réseaux sociaux (facultatif)",
+    "snsPlaceholder": "ex. @machaine",
+    "bgColor": "Couleur de fond",
+    "preview": "Aperçu",
+    "uploadHint": "Déposez la vidéo de fin ici\nou touchez pour sélectionner",
+    "note": "※ Les 5 premières secondes seront utilisées. Recommandé : portrait 9:16"
+  },
+  "step3": {
+    "badge": "ÉTAPE 3",
+    "title": "Générer des Shorts IA",
+    "button": "Générer des Shorts IA",
+    "analyzing": "L'IA analyse votre vidéo...",
+    "analyzingSub": "Détection des moments forts",
+    "generating": "Génération des miniatures..."
+  },
+  "results": {
+    "title": "Clips générés",
+    "regenTitles": "🎲 Régénérer les titres",
+    "dlAll": "⬇ Tout télécharger",
+    "grid": "Grille",
+    "list": "Liste",
+    "selectAll": "☑ Tout sélectionner",
+    "deselectAll": "☐ Tout désélectionner",
+    "dlSelected": "⬇ Télécharger la sélection",
+    "dlVideo": "⬇ Télécharger la vidéo",
+    "recording": "⏺ Enregistrement"
+  },
+  "footer": "ShortAI DEMO — Sans serveur · Fonctionne entièrement dans le navigateur",
+  "toast": {
+    "uploadFirst": "Veuillez d'abord importer une vidéo",
+    "regenDone": "Titres régénérés",
+    "presetSaved": "« {name} » enregistré",
+    "presetApplied": "« {name} » appliqué",
+    "downloaded": "{name} téléchargé",
+    "recordFailed": "Échec de l'enregistrement"
+  }
+}

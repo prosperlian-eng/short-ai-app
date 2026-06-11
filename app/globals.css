@@ -76,6 +76,8 @@ body {
 .locale-btn { padding:5px 12px; border-radius:20px; font-size:12px; font-weight:600; border:1px solid var(--border); background:var(--surface2); color:var(--muted); cursor:pointer; transition:all 0.15s; font-family:inherit; }
 .locale-btn:hover { border-color:var(--accent); color:var(--text); }
 .locale-btn.active { background:rgba(124,58,237,0.2); border-color:var(--accent); color:#c4b5fd; }
+.locale-select { padding:5px 10px; border-radius:20px; font-size:12px; font-weight:600; border:1px solid var(--border); background:var(--surface2); color:var(--text); cursor:pointer; transition:all 0.15s; font-family:inherit; appearance:auto; }
+.locale-select:hover { border-color:var(--accent); }
 .app-container { max-width:900px; margin:0 auto; padding:48px 24px 80px; display:flex; flex-direction:column; gap:24px; }
 .card { background:rgba(17,17,24,0.6); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:var(--radius); padding:32px; position:relative; transition:border-color 0.2s, box-shadow 0.2s; box-shadow:0 8px 32px rgba(0,0,0,0.25); }
 .card:hover { border-color:rgba(124,58,237,0.3); }
