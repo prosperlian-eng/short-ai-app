@@ -232,10 +232,8 @@ export function ShortAIApp() {
 
   // ── generate ──
   const handleGenerate = async () => {
-    // 未ログイン → ログインモーダル
-    if (!user) { setShowAuth(true); return; }
-    // 制限チェック
-    if (!canGenerate(userPlan, usageCount)) { setShowPricing(true); return; }
+    // デモ：未ログインでも制限なしで生成可能。ログイン済みユーザーのみ制限チェック
+    if (user && !canGenerate(userPlan, usageCount)) { setShowPricing(true); return; }
 
     setLoading(true); setProgress(0);
     const n = state.count;
@@ -255,13 +253,15 @@ export function ShortAIApp() {
 
     await renderPreviews(scenes, copies);
 
-    // 生成カウントを記録
-    await fetch('/api/user/usage', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ clips: n }),
-    });
-    await fetchUsage();
+    // 生成カウントを記録（ログイン時のみ）
+    if (user) {
+      await fetch('/api/user/usage', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clips: n }),
+      });
+      await fetchUsage();
+    }
 
     setLoading(false); setShowResults(true);
     setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
