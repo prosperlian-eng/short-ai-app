@@ -22,6 +22,8 @@
     "pattern": "背景样式",
     "ctaText": "CTA 文案",
     "ctaColor": "CTA 颜色",
+    "hook": "🎬 开场钩子",
+    "hookHint": "在开头先抢先展示最精彩瞬间，防止用户划走",
     "preset": "预设",
     "savePreset": "💾 保存",
     "loadPreset": "📂 加载",

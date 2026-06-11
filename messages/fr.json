@@ -22,6 +22,8 @@
     "pattern": "Arrière-plan",
     "ctaText": "Texte CTA",
     "ctaColor": "Couleur CTA",
+    "hook": "🎬 Accroche d'ouverture",
+    "hookHint": "Montre un avant-goût du moment le plus fort dès le début pour capter l'attention",
     "preset": "Préréglage",
     "savePreset": "💾 Enregistrer",
     "loadPreset": "📂 Charger",

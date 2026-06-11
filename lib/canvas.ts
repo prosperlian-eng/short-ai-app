@@ -314,6 +314,7 @@ interface DrawFrameOptions {
   ctaText?: string;
   ctaColor?: string;
   patIdx?: number;
+  hook?: { elapsed: number; duration: number };
 }
 
 export function drawFrame(
@@ -433,7 +434,48 @@ export function drawFrame(
   ctx.fillText('AI生成', W-54, H-22);
 
   drawBorder(ctx, borderStyle, borderColor);
+
+  if (options.hook) drawHookOverlay(ctx, options.hook.elapsed, options.hook.duration);
+
   ctx.restore();
+}
+
+// ── opening hook overlay ──────────────────────────────────────
+function drawHookOverlay(ctx: CanvasRenderingContext2D, elapsed: number, duration: number) {
+  const prog = Math.min(elapsed / duration, 1);
+
+  // Pulsing badge
+  const pulse = 1 + Math.sin(elapsed * 10) * 0.04;
+  ctx.save();
+  ctx.translate(W / 2, 54);
+  ctx.scale(pulse, pulse);
+  ctx.font = '900 26px "Noto Sans JP",sans-serif';
+  ctx.textAlign = 'center';
+  const label = '⚡ この後、衝撃の展開…';
+  const tw = ctx.measureText(label).width;
+  const grad = ctx.createLinearGradient(-tw/2 - 16, 0, tw/2 + 16, 0);
+  grad.addColorStop(0, '#ff3d6e'); grad.addColorStop(1, '#7c3aed');
+  ctx.fillStyle = grad;
+  rr(ctx, -tw/2 - 16, -22, tw + 32, 44, 22); ctx.fill();
+  ctx.fillStyle = '#fff';
+  ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 6;
+  ctx.fillText(label, 0, 9);
+  ctx.shadowBlur = 0;
+  ctx.restore();
+
+  // Countdown progress ring (top-right)
+  const cx = W - 40, cy = 54, r = 18;
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+  ctx.strokeStyle = '#FFD700';
+  ctx.beginPath(); ctx.arc(cx, cy, r, -Math.PI/2, -Math.PI/2 + (1 - prog) * Math.PI * 2); ctx.stroke();
+
+  // Vignette flash on edges
+  const flash = ctx.createRadialGradient(W/2, H/2, H*0.35, W/2, H/2, H*0.7);
+  flash.addColorStop(0, 'transparent');
+  flash.addColorStop(1, `rgba(255,61,110,${0.15 * (1 - prog)})`);
+  ctx.fillStyle = flash; ctx.fillRect(0, 0, W, H);
 }
 
 // ── outro frame ───────────────────────────────────────────────

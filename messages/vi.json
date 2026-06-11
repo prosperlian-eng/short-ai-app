@@ -22,6 +22,8 @@
     "pattern": "Nền",
     "ctaText": "Văn bản CTA",
     "ctaColor": "Màu CTA",
+    "hook": "🎬 Hook mở đầu",
+    "hookHint": "Hé lộ trước khoảnh khắc kịch tính nhất ngay từ đầu để giữ chân người xem",
     "preset": "Mẫu cài sẵn",
     "savePreset": "💾 Lưu",
     "loadPreset": "📂 Tải",

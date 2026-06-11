@@ -22,6 +22,8 @@
     "pattern": "背景パターン",
     "ctaText": "CTAテキスト",
     "ctaColor": "CTAカラー",
+    "hook": "🎬 オープニングフック",
+    "hookHint": "クリップ冒頭に最高潮シーンを一瞬先出しして離脱を防ぎます",
     "preset": "プリセット",
     "savePreset": "💾 保存",
     "loadPreset": "📂 読み込む",

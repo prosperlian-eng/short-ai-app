@@ -20,6 +20,7 @@ export interface AppState {
   pattern: PatternMode;
   ctaText: string;
   ctaColor: string;
+  hookEnabled: boolean;
   copies: string[];
 }
 

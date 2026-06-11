@@ -22,6 +22,8 @@
     "pattern": "Hintergrund",
     "ctaText": "CTA-Text",
     "ctaColor": "CTA-Farbe",
+    "hook": "🎬 Opening-Hook",
+    "hookHint": "Zeigt zu Beginn einen Vorgeschmack auf den spannendsten Moment, um Abbrüche zu vermeiden",
     "preset": "Voreinstellung",
     "savePreset": "💾 Speichern",
     "loadPreset": "📂 Laden",

@@ -22,6 +22,8 @@
     "pattern": "배경 패턴",
     "ctaText": "CTA 텍스트",
     "ctaColor": "CTA 색상",
+    "hook": "🎬 오프닝 훅",
+    "hookHint": "영상 시작에 가장 흥미진진한 장면을 먼저 살짝 보여줘 이탈을 방지합니다",
     "preset": "프리셋",
     "savePreset": "💾 저장",
     "loadPreset": "📂 불러오기",

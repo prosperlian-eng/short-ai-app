@@ -22,6 +22,8 @@
     "pattern": "Background",
     "ctaText": "CTA Text",
     "ctaColor": "CTA Color",
+    "hook": "🎬 Opening Hook",
+    "hookHint": "Teases the most exciting moment at the very start to stop the scroll",
     "preset": "Preset",
     "savePreset": "💾 Save",
     "loadPreset": "📂 Load",

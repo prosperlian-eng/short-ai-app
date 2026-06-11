@@ -22,6 +22,8 @@
     "pattern": "Latar Belakang",
     "ctaText": "Teks CTA",
     "ctaColor": "Warna CTA",
+    "hook": "🎬 Hook Pembuka",
+    "hookHint": "Menampilkan cuplikan momen paling seru di awal agar penonton tidak skip",
     "preset": "Preset",
     "savePreset": "💾 Simpan",
     "loadPreset": "📂 Muat",

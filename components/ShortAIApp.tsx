@@ -55,7 +55,7 @@ const defaultState: AppState = {
   videoFile: null, videoURL: null, count: 3,
   fontFamily: 'gothic', fontEffect: 'gothic', fontSize: 54,
   textColor: '#ffffff', borderStyle: 'none', borderColor: '#FFD700',
-  pattern: 'random', ctaText: '続きは本編で', ctaColor: '#FFD700', copies: [],
+  pattern: 'random', ctaText: '続きは本編で', ctaColor: '#FFD700', hookEnabled: true, copies: [],
 };
 const defaultOutro: OutroState = {
   mode: 'text', channel: '', sub: '', sns: '', bgColor: '#0a0a0f', videoURL: null, duration: 5,
@@ -459,9 +459,24 @@ export function ShortAIApp() {
           };
           recorder.onerror = () => { audioCtx?.close(); reject(new Error('recorder error')); };
           const outroDur = outro.mode !== 'none' ? outro.duration : 0;
-          let phase: 'main'|'outro' = 'main', outroWall: number | null = null;
+          const hookEnabled = state.hookEnabled && d.clipDuration > 4;
+          const hookDur = hookEnabled ? Math.min(1.5, d.clipDuration * 0.25) : 0;
+          const hookStart = Math.min(d.startTime + d.clipDuration * 0.65, Math.max(d.startTime, vid.duration - hookDur - 0.1));
+          let phase: 'hook'|'main'|'outro' = hookEnabled ? 'hook' : 'main';
+          let hookWall: number | null = null, outroWall: number | null = null;
           const tick = (ts: number) => {
-            if (phase === 'main') {
+            if (phase === 'hook') {
+              hookWall ??= ts;
+              const hookElapsed = (ts - hookWall) / 1000;
+              if (hookElapsed >= hookDur) {
+                phase = 'main';
+                vid.pause();
+                vid.addEventListener('seeked', () => { vid.play().catch(() => {}); requestAnimationFrame(tick); }, { once: true });
+                vid.currentTime = d.startTime;
+                return;
+              }
+              drawFrame(ctx, vid, d.title, hookElapsed, hookDur, state, { patIdx: d.patIdx, hook: { elapsed: hookElapsed, duration: hookDur } });
+            } else if (phase === 'main') {
               const elapsed = Math.max(0, vid.currentTime - d.startTime);
               if (elapsed >= d.clipDuration || vid.ended) {
                 vid.volume = 0;
@@ -477,7 +492,7 @@ export function ShortAIApp() {
             requestAnimationFrame(tick);
           };
           vid.addEventListener('seeked', () => { vid.play().catch(() => {}); recorder.start(100); requestAnimationFrame(tick); }, { once: true });
-          vid.currentTime = d.startTime;
+          vid.currentTime = hookEnabled ? hookStart : d.startTime;
         }, { once: true });
         vid.load();
       });
@@ -677,6 +692,16 @@ export function ShortAIApp() {
                 options={(['random','dramatic','clean','energy','luxury','street'] as PatternMode[]).map(v => ({ value: v, label: t(`step2.patterns.${v}`) }))}
                 value={state.pattern}
                 onChange={v => setState(s => ({...s, pattern: v as PatternMode}))} />
+            </div>
+
+            {/* Hook */}
+            <div className="setting-group">
+              <label className="setting-label-row">
+                <input type="checkbox" checked={state.hookEnabled}
+                  onChange={e => setState(s => ({...s, hookEnabled: e.target.checked}))} />
+                <span>{t('step2.hook')}</span>
+              </label>
+              <p className="setting-hint">{t('step2.hookHint')}</p>
             </div>
 
             {/* CTA text */}

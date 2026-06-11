@@ -22,6 +22,8 @@
     "pattern": "Fondo",
     "ctaText": "Texto CTA",
     "ctaColor": "Color CTA",
+    "hook": "🎬 Gancho inicial",
+    "hookHint": "Muestra un adelanto del momento más emocionante al inicio para evitar que la gente se vaya",
     "preset": "Preajuste",
     "savePreset": "💾 Guardar",
     "loadPreset": "📂 Cargar",
