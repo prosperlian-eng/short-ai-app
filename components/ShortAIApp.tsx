@@ -318,6 +318,11 @@ export function ShortAIApp() {
     }
     setState(s => ({ ...s, copies }));
 
+    // 結果セクション（gridRefを含む）をマウントしてからレンダリングする
+    // （これをしないと初回クリックでgridRefがnullになり、2回押す必要があった）
+    setShowResults(true);
+    await new Promise(r => setTimeout(r, 60));
+
     await renderPreviews(scenes, copies);
 
     // 生成カウントを記録（ログイン時のみ）
@@ -330,7 +335,7 @@ export function ShortAIApp() {
       await fetchUsage();
     }
 
-    setLoading(false); setShowResults(true);
+    setLoading(false);
     setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
   };
 
